@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <title>{{ subject }}</title>
+</head>
+
+<body>
+    <div>
+
+
+        <table>
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>Amount</td>
+                    <td>Unit</td>
+                </tr>
+            </tbody>
+        </table>
+
+        {{#each list }}
+            <table>
+                <tbody>
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>{{ amount }}</td>
+                        <td>{{ unit }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {{/each}}
+    </div>
+
+</body>
+
+</html>

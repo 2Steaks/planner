@@ -1,0 +1,84 @@
+# @format
+
+type Image @embedded {
+  id: ID!
+  url: Float!
+  alt: String
+}
+
+type Ingredient @embedded {
+  amount: Float!
+  calories: Float!
+  original: String!
+  name: String!
+  unit: String!
+}
+
+type Method @embedded {
+  instruction: String!
+}
+
+type Stock @embedded {
+  amount: Float!
+  name: String!
+  stock: String
+  unit: String!
+}
+
+type User {
+  firstName: String!
+  lastName: String!
+  email: String! @unique
+  calories: Int
+  avatar: String
+  recipes: [Recipe!] @relation
+  plans: [Plan!] @relation
+  shoppingLists: [Shopping!] @relation
+}
+
+type Recipe {
+  description: String
+  image: String
+  ingredients: [Ingredient]
+  method: [Method]
+  serving: Int
+  tags: [Tag] @relation
+  title: String! @unique
+  author: User! @relation
+  recipes: [Recipe]
+}
+
+type Schedule {
+  day: String!
+  meal: String!
+  plan: Plan! @relation
+  recipe: Recipe! @relation
+  owner: User!
+}
+
+type Plan {
+  week: String!
+  schedule: [Schedule] @relation
+  owner: User!
+}
+
+type Shopping {
+  week: String!
+  ingredients: [Stock]
+  owner: User!
+}
+
+type Tag {
+  name: String! @unique
+  recipe: [Recipe] @relation
+}
+
+type Query {
+  allPlansSortedByWeek: [Plan!]! @resolver(name: "all_plans_sorted_by_week", paginated: true)
+  allRecipes: [Recipe!]
+  allTags: [Tag!]
+  findPlanByDate(week: String!): [Plan] @resolver(name: "find_plan_by_date")
+  findShoppingByDate(week: String!): [Shopping] @resolver(name: "find_shopping_by_date")
+  findUserByEmail(email: String!): User
+  searchRecipeByTitle(title: String!): [Recipe!]! @resolver(name: "search_recipes_by_title")
+}
