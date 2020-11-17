@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "Meal Planner",
   "main": "index.js",
+  "private": true,
   "scripts": {
-    "dev": "next -p 5000",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit && eslint './src/**/*.{ts,tsx}' --quiet",
-    "storybook": "start-storybook -p 6006",
-    "prettier": "prettier --write './src/**/*.{ts,tsx}' --fix"
+    "storybook": "start-storybook -p 6006"
   },
   "husky": {
     "hooks": {
