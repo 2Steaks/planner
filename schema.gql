@@ -21,7 +21,7 @@ type Method @embedded {
 type Stock @embedded {
   amount: Float!
   name: String!
-  stock: String
+  stock: Float
   unit: String!
 }
 
@@ -31,7 +31,9 @@ type User {
   email: String! @unique
   calories: Int
   avatar: String
-  recipes: [Recipe!] @relation
+  favourites: [Recipe!] @relation(name: "user_favourites")
+  recipes: [Recipe!] @relation(name: "user_recipes")
+  # plans: PlanList @relation
   plans: [Plan!] @relation
   shoppingLists: [Shopping!] @relation
 }
@@ -44,8 +46,10 @@ type Recipe {
   serving: Int
   tags: [Tag] @relation
   title: String! @unique
-  author: User! @relation
+  author: User! @relation(name: "user_recipes")
+  favouritedBy: [User!] @relation(name: "user_favourites")
   recipes: [Recipe]
+  schedule: [Schedule] @relation
 }
 
 type Schedule {
@@ -53,14 +57,22 @@ type Schedule {
   meal: String!
   plan: Plan! @relation
   recipe: Recipe! @relation
+  serving: Int!
   owner: User!
 }
 
 type Plan {
+  # list: PlanList @relation
   week: String!
   schedule: [Schedule] @relation
   owner: User!
 }
+
+# type PlanList {
+#   count: Int! @resolver(name: "count_plans")
+#   plans: [Plan!] @relation
+#   owner: User!
+# }
 
 type Shopping {
   week: String!
@@ -74,11 +86,16 @@ type Tag {
 }
 
 type Query {
-  allPlansSortedByWeek: [Plan!]! @resolver(name: "all_plans_sorted_by_week", paginated: true)
+  allPlansSortedByWeek: [Plan!]!
+    @resolver(name: "all_plans_sorted_by_week", paginated: true)
   allRecipes: [Recipe!]
   allTags: [Tag!]
+  isUserFavouriteRecipeById(id: ID!): Boolean
+    @resolver(name: "find_favourite_recipe_by_id")
   findPlanByDate(week: String!): [Plan] @resolver(name: "find_plan_by_date")
-  findShoppingByDate(week: String!): [Shopping] @resolver(name: "find_shopping_by_date")
+  findShoppingByDate(week: String!): [Shopping]
+    @resolver(name: "find_shopping_by_date")
   findUserByEmail(email: String!): User
-  searchRecipeByTitle(title: String!): [Recipe!]! @resolver(name: "search_recipes_by_title")
+  searchRecipeByTitle(title: String!): [Recipe!]!
+    @resolver(name: "search_recipes_by_title")
 }

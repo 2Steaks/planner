@@ -34,7 +34,7 @@
     "isolatedModules": true,
     "downlevelIteration": true
   },
-  "files": ["typings/typings.d.ts"],
+  "files": ["src/typings/typings.d.ts"],
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", ".next"]
 }

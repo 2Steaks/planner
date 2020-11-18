@@ -1,0 +1,36 @@
+{
+  "name": "Planner",
+  "short_name": "Planner",
+  "icons": [
+    {
+      "src": "/icons/icon-256x256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Create Recipe",
+      "url": "/recipes/create",
+      "icons": [
+        {
+          "src": "/icons/icon-256x256.png",
+          "type": "image/png",
+          "sizes": "256x256"
+        }
+      ]
+    }
+  ],
+  "background_color": "#FFFFFF",
+  "description": "Plan your weeks meal",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "theme_color": "#FFFFFF"
+}

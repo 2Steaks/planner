@@ -1,5 +1,9 @@
 /** @format */
 
-module.exports = {
-  target: 'serverless'
-};
+const withPWA = require('next-pwa');
+
+module.exports = withPWA({
+  pwa: {
+    dest: 'public'
+  }
+});

@@ -1,0 +1,93 @@
+<!-- @format -->
+
+<html>
+  <head>
+    <title>{{ subject }}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body
+    style="
+      font-family: 'Rubik';
+      color: rgb(81, 98, 125);
+      text-align: center;
+      width: 600px;
+      margin: 0 auto;
+    "
+  >
+    <table style="width: 100%;">
+      <tbody>
+        <tr>
+          <td>
+            <table
+              style="
+                border-collapse: collapse;
+                width: 100%;
+                margin-bottom: 20px;
+              "
+            >
+              <tbody>
+                <tr style="background-color: #ffebcd;">
+                  <td
+                    style="
+                      vertical-align: middle;
+                      padding: 10px;
+                      text-align: right;
+                    "
+                  >
+                    <img
+                      src="https://planner.benjo696.vercel.app/icons/icon-256x256.png"
+                      style="width: 80px;"
+                    />
+                  </td>
+                  <td style="vertical-align: middle; padding: 10px;">
+                    <h1
+                      style="
+                        font-family: 'Rubik';
+                        color: rgb(81, 98, 125);
+                        margin: 0;
+                        font-size: 44px;
+                      "
+                    >
+                      Planner
+                    </h1>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <h2
+              style="
+                font-family: 'Rubik';
+                color: rgb(81, 98, 125);
+                font-size: 22px;
+                text-align: center;
+              "
+            >
+              Shopping List
+            </h2>
+            {{#each days }}
+            <ul style="padding: 0px; margin: 0px; list-style: none;">
+              {{#each meals }}
+              <li
+                style="
+                  font-family: 'Rubik';
+                  color: rgb(81, 98, 125);
+                  padding: 10px 0;
+                  border-bottom: 2px solid rgb(231, 235, 240);
+                "
+              >
+                {{ title }}
+              </li>
+              {{/each}}
+            </ul>
+            {{/each}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
