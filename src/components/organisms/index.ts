@@ -11,4 +11,3 @@ export * from './ProgressCalories';
 export * from './RecipeArticle';
 export * from './RecipeTile';
 export * from './Select';
-export * from './TagEditor';

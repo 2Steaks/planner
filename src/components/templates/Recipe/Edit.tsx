@@ -18,10 +18,10 @@ import { useGraphMutation } from '@project/hooks';
 import {
   IngredientInput,
   Input,
-  RecipeSelect,
+  RecipeSelectWithField,
   Repeater,
-  Textarea
-  // TagPicker
+  Textarea,
+  TagPicker
 } from '@project/containers';
 import {
   Button,
@@ -54,6 +54,7 @@ interface RecipeEditPageProps {
   hasRecord: boolean;
   onCancel: () => void;
   onComplete: () => void;
+  refetch: () => void;
   record: RecipeType;
 }
 
@@ -66,6 +67,7 @@ const RecipeEditPage: FunctionComponent<RecipeEditPageProps> = ({
   hasRecord,
   onCancel,
   onComplete,
+  refetch,
   record
 }: RecipeEditPageProps) => {
   const router = useRouter();
@@ -176,15 +178,15 @@ const RecipeEditPage: FunctionComponent<RecipeEditPageProps> = ({
                   <Wrapper spacing={WrapperSpacing.SMALL}>
                     <Input disabled={isSubmitting} name="title" label="Title" />
                   </Wrapper>
-                  {/* <Wrapper spacing={WrapperSpacing.SMALL}>
-                      <TagPicker
-                        label="Tags"
-                        name="tags.data"
-                        isDisabled={!hasRecord || !isEditing}
-                        recordId={id as string}
-                        onChange={refetch}
-                      />
-                    </Wrapper> */}
+                  <Wrapper spacing={WrapperSpacing.SMALL}>
+                    <TagPicker
+                      label="Tags"
+                      name="tags.data"
+                      disabled={!hasRecord || isSubmitting}
+                      recordId={values.id as string}
+                      onChange={refetch}
+                    />
+                  </Wrapper>
                   <Wrapper spacing={WrapperSpacing.SMALL}>
                     <Input
                       disabled={isSubmitting}
@@ -253,7 +255,9 @@ const RecipeEditPage: FunctionComponent<RecipeEditPageProps> = ({
               <Heading tag={HeadingTag.H2}>Related Recipes</Heading>
 
               <Repeater isDisabled={isSubmitting} name="recipes">
-                {(props: RepeaterRowProps) => <RecipeSelect {...props} />}
+                {({ index }: RepeaterRowProps) => (
+                  <RecipeSelectWithField name={`recipes.${index}`} />
+                )}
               </Repeater>
             </Wrapper>
 

@@ -1,74 +1,72 @@
 /** @format */
 
 import React, { FunctionComponent } from 'react';
+import { difference } from 'ramda';
 import { useGraphMutation, useGraphQuery } from '@project/hooks';
-import { GET_TAGS, UPDATE_TAG } from '@project/graphql';
-import { createTagQuery } from '@project/services';
+import { GET_TAGS, PARTIAL_UPDATE_RECIPE } from '@project/graphql';
+import { createRecipeQuery } from '@project/services';
 import { withField } from '@project/helpers/withField';
-import {
-  TagEditor,
-  TagEditorOption
-} from '@project/components/organisms/TagEditor';
+import { Select } from '@project/components/organisms/Select';
 import { getSuggestions, createOptions } from './model';
 
 export interface TagPickerProps {
+  disabled?: boolean;
+  label?: string;
+  name: string;
   onChange: () => void;
   recordId: string;
-  value: any[];
+  value?: any[];
 }
 
 export const TagPicker: FunctionComponent<TagPickerProps> = withField(
   ({ onChange, recordId, value = [], ...props }: TagPickerProps) => {
     const { data, refetch } = useGraphQuery('tags', GET_TAGS);
-    const suggestions = getSuggestions(data);
 
-    // const [createTag] = useGraphMutation(CREATE_TAG, {
-    //   onSuccess: handleCompleted
-    // });
-    const [updateTag] = useGraphMutation(UPDATE_TAG, {
-      onSuccess: handleCompleted
+    const [updateRecipe] = useGraphMutation(PARTIAL_UPDATE_RECIPE, {
+      onSuccess: onChange
     });
 
-    // function handleCreate(name: string) {
-    //   createTag(
-    //     createTagQuery({
-    //       name,
-    //       connectRecipe: recordId
-    //     })
-    //   );
-    // }
+    async function handleCreate(name: string) {
+      await updateRecipe(
+        createRecipeQuery({
+          id: recordId,
+          createTags: [{ name: name.toLowerCase() }]
+        })
+      );
 
-    // function handleAdd(tag: TagEditorOption) {
-    //   updateTag(
-    //     createTagQuery({
-    //       id: tag.value,
-    //       name: tag.label,
-    //       connectRecipe: recordId
-    //     })
-    //   );
-    // }
+      refetch();
+    }
 
-    function handleChange(tag: TagEditorOption) {
-      updateTag(
-        createTagQuery({
-          id: tag.value,
-          name: tag.label,
-          disconnectRecipe: recordId
+    async function handleChange(values: any[]) {
+      const tags = values.map(({ value, label }: any) => ({
+        id: value,
+        name: label
+      }));
+
+      const connections = difference(tags, value).map((tag) => tag.id);
+      const disconnections = difference(value, tags).map((tag) => tag.id);
+
+      updateRecipe(
+        createRecipeQuery({
+          id: recordId,
+          connectTags: connections,
+          disconnectTags: disconnections
         })
       );
     }
 
-    function handleCompleted() {
-      refetch();
-      onChange();
+    function handleKeyPress(event: any) {
+      if (event.key === 'Enter') {
+        handleCreate(event.target.value);
+      }
     }
 
     return (
-      <TagEditor
-        // onAdd={handleAdd}
-        // onCreate={handleCreate}
+      <Select
+        multiple
         onChange={handleChange}
-        suggestions={suggestions}
+        onKeyPress={handleKeyPress}
+        options={getSuggestions(data)}
         value={createOptions(value)}
         {...props}
       />

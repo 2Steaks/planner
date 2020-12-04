@@ -31,7 +31,7 @@ const Component: FunctionComponent<OptionProps> = ({
   const isDisabled = includes(value);
 
   function handleChange() {
-    onChange(setValue(multiple, value)(values));
+    onChange(setValue(multiple, { value, label })(values));
     setIsFocused(false);
     setSearchTerm('');
   }

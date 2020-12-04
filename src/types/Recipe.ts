@@ -10,7 +10,7 @@ export interface RecipeMethodType {
 
 export interface RecipeType {
   id?: string;
-  author: any;
+  author?: any;
   calories?: number;
   description?: string;
   image?: string;
@@ -18,5 +18,7 @@ export interface RecipeType {
   method?: RecipeMethodType[];
   serving?: number;
   title?: string;
-  tags?: string[];
+  tags?: {
+    data: any[];
+  };
 }

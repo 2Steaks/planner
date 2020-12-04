@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { compose } from 'ramda';
+import { compose, difference } from 'ramda';
 import { withDisplayName, withLogging, withStyle } from '@project/helpers';
 import { useDebounce } from '@project/hooks';
 import { ClickAwayListener } from '@project/components/atoms/ClickAwayListener';
@@ -33,6 +33,7 @@ export interface SelectProps {
   name: string;
   onBlur: (x: string) => void;
   onChange: (x: string) => void;
+  onKeyPress: (event: KeyboardEvent) => void;
   onServer: (x: string) => void;
   options: OptionProps[];
   readOnly?: boolean;
@@ -57,6 +58,7 @@ const Component: FunctionComponent<SelectProps> = ({
   multiple = false,
   onBlur,
   onChange,
+  onKeyPress,
   onServer,
   options = [],
   name,
@@ -70,7 +72,8 @@ const Component: FunctionComponent<SelectProps> = ({
   const [searchTerm, setSearchTerm] = useState<any>(terms);
   const [isFocused, setIsFocused] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
-  const filteredOptions = getOptionsBySearchTerm(searchTerm)(options);
+  const omitOptions = multiple ? difference(options, value) : options;
+  const filteredOptions = getOptionsBySearchTerm(searchTerm)(omitOptions);
   const Menu = portalNode ? PortalMenu : FixedMenu;
   const isMenuVisible =
     !disabled && isFocused && Boolean(filteredOptions.length);
@@ -119,20 +122,22 @@ const Component: FunctionComponent<SelectProps> = ({
             <InputWrapper onClick={handleFocus}>
               <Flex spacing="0.2rem" wrap={FlexWrap.WRAP}>
                 <When condition={multiple}>
-                  {values.map((term: string, i: number) => (
-                    <FlexColumn key={term}>
-                      <Tag index={i}>{term}</Tag>
+                  {values.map((value: any, i: number) => (
+                    <FlexColumn key={value.label}>
+                      <Tag index={i}>{value.label}</Tag>
                     </FlexColumn>
                   ))}
                 </When>
                 <FlexColumn grow={1}>
                   <InputField
+                    disabled={disabled}
                     autoComplete="off"
                     multiple={multiple}
                     name={name}
                     placeholder={displayValue}
                     onBlur={onBlur}
                     onChange={handleChange}
+                    onKeyPress={onKeyPress}
                     ref={inputRef}
                     value={searchTerm}
                   />

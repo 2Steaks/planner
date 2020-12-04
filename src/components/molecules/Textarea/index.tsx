@@ -38,9 +38,7 @@ const Component: FunctionComponent<TextareaProps> = ({
         <Label htmlFor={name}>{label}</Label>
       </When>
       <Clone data-value={value}>
-        <textarea id={name} ref={forwardRef} {...props}>
-          {value}
-        </textarea>
+        <textarea id={name} ref={forwardRef} value={value} {...props} />
       </Clone>
     </div>
   );

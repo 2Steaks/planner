@@ -23,8 +23,8 @@ export const CREATE_TAG = gql`
 `;
 
 export const UPDATE_TAG = gql`
-  mutation UpdateTag($id: ID!, $data: TagInput!) {
-    updateTag(id: $id, data: $data) {
+  mutation PartialUpdateTag($id: ID!, $data: PartialUpdateTagInput!) {
+    partialUpdateTag(id: $id, data: $data) {
       id: _id
       name
     }

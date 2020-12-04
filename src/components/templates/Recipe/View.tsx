@@ -127,6 +127,12 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
             <Wrapper spacing={WrapperSpacing.SMALL}>
               <p>{record.description}</p>
             </Wrapper>
+
+            <List inline>
+              {record?.tags?.data.map((tag: any) => (
+                <ListItem>{tag.name}</ListItem>
+              ))}
+            </List>
           </GridColumn>
         </Grid>
       </Wrapper>

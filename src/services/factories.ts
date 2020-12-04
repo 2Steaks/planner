@@ -116,9 +116,9 @@ export const createRecipeQuery = ({
       disconnect: disconnectTags
     }),
     title,
-    author: {
+    author: createConnections({
       connect: author
-    }
+    })
   }
 });
 

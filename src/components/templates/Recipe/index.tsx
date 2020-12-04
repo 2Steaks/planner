@@ -29,7 +29,7 @@ const RecipePage: FunctionComponent<RecipePageProps> = ({
 
   const [isEditing, setIsEditing] = useState(!hasRecord);
 
-  const { data, error, isLoading } = useGraphQuery(
+  const { data, error, isLoading, refetch } = useGraphQuery(
     [`recipe/${id}`, createRecipeQuery({ id, author: getId(user) })],
     GET_RECIPE,
     { enabled: hasRecord, staleTime: Infinity }
@@ -52,6 +52,7 @@ const RecipePage: FunctionComponent<RecipePageProps> = ({
         onCancel={() => setIsEditing(false)}
         onComplete={() => setIsEditing(false)}
         onEdit={() => setIsEditing(true)}
+        refetch={refetch}
         record={record}
       />
     </ErrorBoundary>

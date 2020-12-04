@@ -147,6 +147,30 @@ export const UPDATE_RECIPE = gql`
   ${RECIPE_RELATED_FRAGMENT}
 `;
 
+export const PARTIAL_UPDATE_RECIPE = gql`
+  mutation PartialUpdateRecipe($id: ID!, $data: PartialUpdateRecipeInput!) {
+    partialUpdateRecipe(id: $id, data: $data) {
+      method {
+        instruction
+      }
+      tags {
+        data {
+          id: _id
+          name
+        }
+      }
+      ...recipeCommonProps
+      ...recipeAuthorProps
+      ...recipeIngredientsProps
+      ...recipeRelatedProps
+    }
+  }
+  ${RECIPE_COMMON_FRAGMENT}
+  ${RECIPE_AUTHOR_FRAGMENT}
+  ${RECIPE_INGREDIENTS_FRAGMENT}
+  ${RECIPE_RELATED_FRAGMENT}
+`;
+
 export const DELETE_RECIPE = gql`
   mutation DeleteRecipe($id: ID!) {
     deleteRecipe(id: $id) {

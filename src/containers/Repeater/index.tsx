@@ -8,6 +8,7 @@ import { Repeater as BaseRepeater } from '@project/components/molecules/Repeater
 const Container = ({ children, insert, move, remove, ...props }: any) => {
   function handleChange(index: number) {
     return function (value: any) {
+      console.log(value);
       props.form.setFieldValue(`${props.name}.${index}`, value);
     };
   }

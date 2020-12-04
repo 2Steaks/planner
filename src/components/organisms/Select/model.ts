@@ -23,7 +23,6 @@ export const getLabelByValue: getLabelByValueType = (x: string): any =>
 
 export const toArray = R.ifElse(isArray, R.identity, Array.of);
 
-export const setValue: any = R.curry(
-  (multiple: boolean, value: string | number) =>
-    R.ifElse(R.always(multiple), R.append(value), R.always(value))
+export const setValue: any = R.curry((multiple: boolean, obj: any) =>
+  R.ifElse(R.always(multiple), R.append(obj), R.always(obj.value))
 );

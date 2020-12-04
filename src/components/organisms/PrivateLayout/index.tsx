@@ -9,7 +9,6 @@ import { useAuth } from '@project/context';
 import { Drawer, DrawerPosition } from '@project/components/atoms/Drawer';
 import { MenuBar } from '@project/components/organisms/MenuBar';
 import { MobileMenuBar } from '@project/components/organisms/MobileMenuBar';
-import { ProgressAPI } from '@project/containers/ProgressAPI';
 import { When } from '@project/components/atoms/When';
 import { Wrapper } from '@project/components/atoms/Wrapper';
 import { styles } from './styles';
@@ -32,9 +31,6 @@ const Component: FunctionComponent<PrivateLayoutProps> = ({
         <Drawer position={DrawerPosition.TOP} sticky>
           <MenuBar avatar={prop('avatar', user)} />
         </Drawer>
-      </When>
-      <When condition={isTablet}>
-        <ProgressAPI />
       </When>
       <Wrapper tag="main" constraint={Breakpoints.LARGE} padding centered>
         {children}
