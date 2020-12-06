@@ -34,6 +34,14 @@ export const RECIPE_INGREDIENTS_FRAGMENT = gql`
   }
 `;
 
+export const RECIPE_TIPS_FRAGMENT = gql`
+  fragment recipeTipsProps on Recipe {
+    tips {
+      text
+    }
+  }
+`;
+
 export const RECIPE_RELATED_FRAGMENT = gql`
   fragment recipeRelatedProps on Recipe {
     recipes {
@@ -71,12 +79,14 @@ export const GET_RECIPE = gql`
       ...recipeCommonProps
       ...recipeAuthorProps
       ...recipeIngredientsProps
+      ...recipeTipsProps
       ...recipeRelatedProps
     }
   }
   ${RECIPE_COMMON_FRAGMENT}
   ${RECIPE_AUTHOR_FRAGMENT}
   ${RECIPE_INGREDIENTS_FRAGMENT}
+  ${RECIPE_TIPS_FRAGMENT}
   ${RECIPE_RELATED_FRAGMENT}
 `;
 

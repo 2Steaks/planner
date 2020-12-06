@@ -201,7 +201,6 @@ const RecipeEditPage: FunctionComponent<RecipeEditPageProps> = ({
                       disabled={isSubmitting}
                       label="Description"
                       name="description"
-                      rows={1}
                     />
                   </Wrapper>
 
@@ -242,13 +241,25 @@ const RecipeEditPage: FunctionComponent<RecipeEditPageProps> = ({
                         <Textarea
                           disabled={isSubmitting}
                           name={`method.${index}.instruction`}
-                          rows={1}
                         />
                       </Fragment>
                     )}
                   </Repeater>
                 </GridColumn>
               </Grid>
+            </Wrapper>
+
+            <Wrapper spacing={WrapperSpacing.LARGE}>
+              <Heading tag={HeadingTag.H2}>Recipe Tips</Heading>
+
+              <Repeater isDisabled={isSubmitting} name="tips">
+                {({ index }: RepeaterRowProps) => (
+                  <Textarea
+                    disabled={isSubmitting}
+                    name={`tips.${index}.text`}
+                  />
+                )}
+              </Repeater>
             </Wrapper>
 
             <Wrapper spacing={WrapperSpacing.LARGE}>

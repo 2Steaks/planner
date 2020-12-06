@@ -6,6 +6,13 @@ import { colors, gutter, objectFit, styleWithHelpers } from '@project/theme';
 import { CutleryIcon, Image, LogoIcon } from '@project/components/atoms';
 import { ProgressAPI } from '@project/containers/ProgressAPI';
 
+export const Anchor = styled('a')`
+  text-decoration: none;
+  color: ${colors.slate900};
+  font-weight: bold;
+  cursor: pointer;
+`;
+
 export const Span = styled('span')`
   font-size: 3rem;
   vertical-align: middle;

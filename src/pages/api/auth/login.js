@@ -22,7 +22,11 @@ export default async function login(req, res) {
     );
 
     if (!faunaUser) {
-      return res.status(400).send('User does not exist');
+      return res.status(400).send({
+        errors: {
+          email: 'does not exist'
+        }
+      });
     }
 
     const { secret } = await faunaAdminClient.query(getFaunaToken(faunaUser));
@@ -45,6 +49,15 @@ export default async function login(req, res) {
     res.status(200).json({ id: ref.id, ...data });
   } catch (error) {
     console.error(error);
+
+    if (error.requestResult.statusCode === 404) {
+      return res.status(400).send({
+        errors: {
+          email: 'does not exist'
+        }
+      });
+    }
+
     res.status(error.requestResult.statusCode).send(error.message);
   }
 }

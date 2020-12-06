@@ -14,16 +14,6 @@ export const createFaunaUser = (data: any) =>
     data
   });
 
-export const createFaunaUserMeta = async (user: any) => {
-  return q.Create(q.Collection('PlanList'), {
-    data: {
-      count: 0,
-      plans: [],
-      owner: q.Select('ref', user)
-    }
-  });
-};
-
 export const getFaunaToken = (user: any) =>
   q.Create(q.Tokens(), { instance: q.Select('ref', user) });
 

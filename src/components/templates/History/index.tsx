@@ -5,17 +5,21 @@ import { useGraphQuery } from '@project/hooks';
 import { map } from 'ramda';
 import { GET_PLANS_SORTED_BY_WEEK } from '@project/graphql';
 import { Breakpoints } from '@project/types';
+import { hasHistory } from '@project/services';
+import { BackButton } from '@project/containers';
 import {
   Button,
   ErrorBoundary,
   ErrorFallback,
   Flex,
+  FlexAlignItems,
   FlexColumn,
   FlexJustifyContent,
   Heading,
   Select,
   Wrapper,
-  WrapperSpacing
+  WrapperSpacing,
+  When
 } from '@project/components';
 import {
   getNextPage,
@@ -48,7 +52,16 @@ const History: FunctionComponent = () => {
 
   return (
     <ErrorBoundary fallback={ErrorFallback}>
-      <Heading>History</Heading>
+      <Flex alignItems={FlexAlignItems.BASELINE}>
+        <When condition={hasHistory()}>
+          <FlexColumn shrink={1}>
+            <BackButton />
+          </FlexColumn>
+        </When>
+        <FlexColumn grow={1}>
+          <Heading>History</Heading>
+        </FlexColumn>
+      </Flex>
       <Wrapper constraint={Breakpoints.TINY} spacing={WrapperSpacing.LARGE}>
         <Select
           options={getPageLimitOptions(PAGE_LIMITS)}

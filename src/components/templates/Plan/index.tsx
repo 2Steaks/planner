@@ -10,22 +10,28 @@ import { CREATE_PLAN, GET_PLAN } from '@project/graphql';
 import { useGraphMutation, useGraphQuery } from '@project/hooks';
 import {
   createPlanQuery,
+  hasHistory,
   hiphenToSlash,
   sendMealPlan
 } from '@project/services';
 import { useAuth } from '@project/context';
+import { BackButton } from '@project/containers';
 import {
   Button,
   ButtonType,
+  ButtonVariant,
+  EmailIcon,
   ErrorBoundary,
   ErrorFallback,
   Flex,
+  FlexAlignItems,
   FlexColumn,
   FlexJustifyContent,
   Heading,
   HeadingSize,
   HeadingTag,
   MenuButton,
+  LinkIcon,
   List,
   ListItem,
   WeekPicker,
@@ -42,7 +48,6 @@ import {
   getSchedule
 } from './model';
 import { Day } from './Day';
-import { ButtonVariant } from '@project/components/atoms';
 
 interface PlanPageProps {
   week?: string;
@@ -95,12 +100,17 @@ const PlanPage: FunctionComponent<PlanPageProps> = ({
         <title>Meal Planner: {formattedDate}</title>
       </Head>
 
-      <Flex justifyContent={FlexJustifyContent.SPACE_BETWEEN}>
-        <FlexColumn>
+      <Flex
+        alignItems={FlexAlignItems.BASELINE}
+        justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+      >
+        <When condition={hasHistory()}>
+          <FlexColumn shrink={1}>
+            <BackButton />
+          </FlexColumn>
+        </When>
+        <FlexColumn grow={1}>
           <Heading tag={HeadingTag.H1}>Meal Planner</Heading>
-          <Heading size={HeadingSize.H4} tag={HeadingTag.H2}>
-            {formattedDate}
-          </Heading>
         </FlexColumn>
         <FlexColumn>
           <MenuButton>
@@ -112,7 +122,12 @@ const PlanPage: FunctionComponent<PlanPageProps> = ({
                   variant={ButtonVariant.NONE}
                   onClick={() => sendMealPlan(user, record)}
                 >
-                  Share
+                  <List inline>
+                    <ListItem>
+                      <EmailIcon />
+                    </ListItem>
+                    <ListItem>Send</ListItem>
+                  </List>
                 </Button>
               </ListItem>
               <ListItem padding>
@@ -125,7 +140,12 @@ const PlanPage: FunctionComponent<PlanPageProps> = ({
                     type={ButtonType.BUTTON}
                     variant={ButtonVariant.NONE}
                   >
-                    Shopping
+                    <List inline>
+                      <ListItem>
+                        <LinkIcon />
+                      </ListItem>
+                      <ListItem>Shopping</ListItem>
+                    </List>
                   </Button>
                 </Link>
               </ListItem>
@@ -138,6 +158,9 @@ const PlanPage: FunctionComponent<PlanPageProps> = ({
         <p>...loading</p>
       </When>
       <When condition={!isLoading}>
+        <Heading size={HeadingSize.H4} tag={HeadingTag.H2}>
+          {formattedDate}
+        </Heading>
         <Wrapper constraint={Breakpoints.TINY} spacing={WrapperSpacing.LARGE}>
           <WeekPicker name="week" value={week} onChange={handleWeekChange} />
         </Wrapper>

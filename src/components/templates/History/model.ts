@@ -14,9 +14,15 @@ export const getPrevPage = R.view(R.compose(allPlansLens, beforeLens) as any);
 export const getNextPage = R.view(R.compose(allPlansLens, afterLens) as any);
 
 export const getPrettyDate = (x: string) =>
-  format(startOfWeek(getDateFromWeek(x)), 'd MMM Y') +
+  format(
+    startOfWeek(getDateFromWeek(x), { locale: { code: 'en-GB' } }),
+    'd MMM Y'
+  ) +
   ' - ' +
-  format(endOfWeek(getDateFromWeek(x)), 'd MMM Y');
+  format(
+    endOfWeek(getDateFromWeek(x), { locale: { code: 'en-GB' } }),
+    'd MMM Y'
+  );
 
 export const getPageLimitOptions = R.map((value) => ({
   label: R.toString(value),

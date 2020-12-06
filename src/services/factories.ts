@@ -98,27 +98,29 @@ export const createRecipeQuery = ({
   createTags,
   connectTags,
   disconnectTags,
+  tips,
   title
 }: createRecipeQueryProps): any => ({
   id,
   data: {
+    author: createConnections({
+      connect: author
+    }),
     calories,
     description,
     image,
     ingredients,
     method,
     plan,
-    serving,
     recipes,
+    serving,
     tags: createConnections({
       connect: connectTags,
       create: createTags,
       disconnect: disconnectTags
     }),
-    title,
-    author: createConnections({
-      connect: author
-    })
+    tips,
+    title
   }
 });
 

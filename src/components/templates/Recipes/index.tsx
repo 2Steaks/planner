@@ -4,20 +4,25 @@
 import React, { FunctionComponent, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { hasHistory } from '@project/services';
+import { BackButton } from '@project/containers';
 import {
   Button,
   ButtonVariant,
   ErrorBoundary,
   ErrorFallback,
   Flex,
+  FlexAlignItems,
   FlexColumn,
   FlexJustifyContent,
   Heading,
   List,
   ListItem,
   MenuButton,
+  PencilIcon,
   Tabs,
-  Tab
+  Tab,
+  When
 } from '@project/components';
 import { FavouriteRecipes } from './FavouriteRecipes';
 import { MyRecipes } from './MyRecipes';
@@ -36,17 +41,34 @@ const RecipesPage: FunctionComponent = () => {
         <title>Recipes page</title>
       </Head>
 
-      <Flex justifyContent={FlexJustifyContent.SPACE_BETWEEN}>
-        <FlexColumn>
+      <Flex
+        alignItems={FlexAlignItems.BASELINE}
+        justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+      >
+        <When condition={hasHistory()}>
+          <FlexColumn shrink={1}>
+            <BackButton />
+          </FlexColumn>
+        </When>
+        <FlexColumn grow={1}>
           <Heading>Recipes</Heading>
         </FlexColumn>
         <FlexColumn>
           <MenuButton>
             <List>
               <ListItem padding>
-                <Link href="/recipes/create" passHref>
-                  <Button variant={ButtonVariant.NONE}>Create Recipe</Button>
-                </Link>
+                <List inline>
+                  <ListItem>
+                    <PencilIcon />
+                  </ListItem>
+                  <ListItem>
+                    <Link href="/recipes/create" passHref>
+                      <Button variant={ButtonVariant.NONE}>
+                        Create Recipe
+                      </Button>
+                    </Link>
+                  </ListItem>
+                </List>
               </ListItem>
             </List>
           </MenuButton>

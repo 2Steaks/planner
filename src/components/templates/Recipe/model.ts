@@ -34,6 +34,8 @@ export const getIngredient = (index: number): any =>
 
 export const getRelatedRecipes = R.pathOr([], ['recipes']);
 
+export const getRecipeTips = R.pathOr([], ['tips']);
+
 export const getIngredientText = (index: number) =>
   R.compose(getText, getIngredient(index));
 
@@ -46,6 +48,6 @@ export const hasBeenScheduled = R.compose(
   R.path(['schedule', 'data'])
 );
 
-export const schema = Yup.object({
+export const schema = Yup.object().shape({
   title: Yup.string().required('Required')
 });

@@ -20,6 +20,7 @@ export enum FlexJustifyContent {
 }
 
 export enum FlexAlignItems {
+  BASELINE = 'baseline',
   CENTER = 'center'
 }
 

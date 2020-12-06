@@ -1,8 +1,10 @@
 /** @format */
 
+export * from './BackButton';
 export * from './FavouriteRecipe';
 export * from './Field';
 export * from './IngredientInput';
+export * from './MenuBar';
 export * from './ProgressAPI';
 export * from './RecipeSelect';
 export * from './Repeater';

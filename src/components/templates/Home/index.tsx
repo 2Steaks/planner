@@ -2,16 +2,18 @@
 
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
-import { compose, map, prop } from 'ramda';
+import { map, prop } from 'ramda';
 import { Breakpoints } from '@project/types';
-import { GET_RECIPES } from '@project/graphql';
+import { GET_TAG_BY_NAME } from '@project/graphql';
 import { useGraphQuery, useMediaQuery } from '@project/hooks';
 import { useAuth } from '@project/context';
 import {
+  Anchor,
   Avatar,
   ErrorBoundary,
   ErrorFallback,
   Flex,
+  FlexAlignItems,
   FlexColumn,
   FlexJustifyContent,
   Grid,
@@ -22,14 +24,23 @@ import {
   WrapperSpacing
 } from '@project/components';
 import { Recipe } from './Recipe';
-import { getRecords } from './model';
+import { getTagRecipes } from './model';
 
-const Recipes = compose(map(Recipe), getRecords);
+const Recipes = map(Recipe);
 
 const Home: FunctionComponent = () => {
-  const { user } = useAuth() as any;
+  const { isAuthenticated, user } = useAuth() as any;
   const isTablet = useMediaQuery(`(max-width:${Breakpoints.SMALL})`);
-  const { data } = useGraphQuery('recipes', GET_RECIPES);
+
+  const { data: italianRecipes } = useGraphQuery(
+    [`tag/italian`, { name: 'italian', limit: 5 }],
+    GET_TAG_BY_NAME
+  );
+
+  const { data: indianRecipes } = useGraphQuery(
+    [`tag/indian`, { name: 'indian', limit: 5 }],
+    GET_TAG_BY_NAME
+  );
 
   return (
     <ErrorBoundary fallback={ErrorFallback}>
@@ -38,7 +49,7 @@ const Home: FunctionComponent = () => {
           <FlexColumn>
             <Heading>Home</Heading>
           </FlexColumn>
-          <When condition={isTablet}>
+          <When condition={isAuthenticated && isTablet}>
             <FlexColumn>
               <Link href="/profile">
                 <Avatar image={prop('avatar', user)} />
@@ -48,8 +59,37 @@ const Home: FunctionComponent = () => {
         </Flex>
       </Wrapper>
 
-      <Heading tag={HeadingTag.H2}>Latest Recipes</Heading>
-      <Grid tag="section">{Recipes(data)}</Grid>
+      <Wrapper spacing={WrapperSpacing.LARGE}>
+        <Flex
+          alignItems={FlexAlignItems.CENTER}
+          justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+        >
+          <FlexColumn>
+            <Heading tag={HeadingTag.H2}>Italian Recipes</Heading>
+          </FlexColumn>
+          <FlexColumn>
+            <Link href={`/tag/italian`} passHref>
+              <Anchor>See all</Anchor>
+            </Link>
+          </FlexColumn>
+        </Flex>
+        <Grid tag="section">{Recipes(getTagRecipes(italianRecipes))}</Grid>
+      </Wrapper>
+
+      <Flex
+        alignItems={FlexAlignItems.CENTER}
+        justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+      >
+        <FlexColumn>
+          <Heading tag={HeadingTag.H2}>Indian Recipes</Heading>
+        </FlexColumn>
+        <FlexColumn>
+          <Link href={`/tag/indian`} passHref>
+            <Anchor>See all</Anchor>
+          </Link>
+        </FlexColumn>
+      </Flex>
+      <Grid tag="section">{Recipes(getTagRecipes(indianRecipes))}</Grid>
     </ErrorBoundary>
   );
 };

@@ -10,7 +10,6 @@ import {
   userLogout,
   userSignup
 } from '@project/services';
-import { Login, PublicLayout } from '@project/components';
 
 export type SessionProps = UserType | undefined | null;
 
@@ -32,11 +31,13 @@ const AuthProvider = ({ children, session }: ProviderProps) => {
   const [user, setUser] = useState<SessionProps>(session);
 
   const [signup] = useMutation(userSignup, {
-    onSuccess: setUser
+    onSuccess: setUser,
+    throwOnError: true
   });
 
   const [login] = useMutation(userLogin, {
-    onSuccess: setUser
+    onSuccess: setUser,
+    throwOnError: true
   });
 
   const [logout] = useMutation(userLogout, {
@@ -51,14 +52,6 @@ const AuthProvider = ({ children, session }: ProviderProps) => {
     user,
     setUser
   } as any;
-
-  if (!context.isAuthenticated) {
-    return (
-      <PublicLayout>
-        <Login {...context} />
-      </PublicLayout>
-    );
-  }
 
   return <Context.Provider value={context}>{children}</Context.Provider>;
 };

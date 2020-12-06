@@ -4,7 +4,12 @@ import { MouseEvent } from 'react';
 import { css, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
 import { StyledComponentWithExtra, ChildrenType } from '@project/types';
-import { colors, inputBaseStyle, styleWithHelpers } from '@project/theme';
+import {
+  colors,
+  gutter,
+  inputBaseStyle,
+  styleWithHelpers
+} from '@project/theme';
 import { Menu } from '@project/components/atoms/Menu';
 
 type InputWrapperType = ChildrenType & {
@@ -27,6 +32,7 @@ export const InputField: StyledComponentWithExtra<InputFieldType> = styled(
   styleWithHelpers(
     ({ not }): SerializedStyles => css`
       width: ${not('multiple', '100%')};
+      padding: calc(${gutter} / 4) 0;
     `
   )
 );

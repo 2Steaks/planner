@@ -1,10 +1,20 @@
 /** @format */
 
-// pages/index.js
 import React, { FunctionComponent } from 'react';
-import { Home, PrivateLayout } from '@project/components';
+import { useAuth } from '@project/context';
+import { Home, PrivateLayout, PublicLayout } from '@project/components';
 
 const HomePage: FunctionComponent = () => {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return (
+      <PublicLayout>
+        <Home />
+      </PublicLayout>
+    );
+  }
+
   return (
     <PrivateLayout>
       <Home />

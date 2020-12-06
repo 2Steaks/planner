@@ -1,7 +1,7 @@
 /** @format */
 
 import styled from '@emotion/styled';
-import { objectFit } from '@project/theme';
+import { colors, objectFit } from '@project/theme';
 import { AvatarUploader, Image } from '@project/components';
 
 export const ImageWrapper = styled('div')`
@@ -16,4 +16,8 @@ export const RecipePhoto = styled(Image)`
 
 export const RecipePhotoUploader = styled(AvatarUploader)`
   height: 200px;
+`;
+
+export const TagAnchor = styled('a')`
+  color: ${colors.white};
 `;

@@ -1,8 +1,8 @@
 /** @format */
 
 import React, { Fragment, FunctionComponent } from 'react';
-import { Formik, Form, FormikValues } from 'formik';
-import { AuthContextProps, SessionProps } from '@project/context';
+import { Formik, Form, FormikHelpers, FormikValues } from 'formik';
+import { AuthContextProps, SessionProps, useAuth } from '@project/context';
 import { Input } from '@project/containers';
 import {
   Button,
@@ -15,14 +15,30 @@ import {
 } from '@project/components';
 import { initialValues, schema } from './model';
 
-export const SignUp: FunctionComponent<Pick<AuthContextProps, 'signup'>> = ({
-  signup
-}: Pick<AuthContextProps, 'signup'>) => {
+export interface SignUpFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export const SignUp: FunctionComponent = () => {
+  const { signup } = useAuth() as AuthContextProps;
   const { setLoading } = useModal() as ModalContextProps;
 
-  async function handleSubmit(values: FormikValues) {
+  async function handleSubmit(
+    values: FormikValues,
+    { setErrors }: FormikHelpers<SignUpFormValues>
+  ) {
     setLoading(true);
-    await signup(values as SessionProps);
+
+    try {
+      await signup(values as SessionProps);
+    } catch (errors) {
+      if (errors.response.status === 400) {
+        setErrors(errors.response.data.errors);
+      }
+    }
+
     setLoading(false);
   }
 

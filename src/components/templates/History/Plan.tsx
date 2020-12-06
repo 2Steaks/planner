@@ -13,6 +13,7 @@ import {
   Heading,
   HeadingSize,
   HeadingTag,
+  LinkIcon,
   List,
   ListItem,
   MenuButton,
@@ -53,12 +54,24 @@ export const Plan: FunctionComponent<PlanPageProps> = ({
               <List>
                 <ListItem padding>
                   <Link href={`/plan/${hiphenToSlash(week)}`} passHref>
-                    <Button variant={ButtonVariant.NONE}>View</Button>
+                    <Button variant={ButtonVariant.NONE}>
+                      <List inline>
+                        <ListItem>
+                          <LinkIcon />
+                        </ListItem>
+                        <ListItem>View</ListItem>
+                      </List>
+                    </Button>
                   </Link>
                 </ListItem>
                 <ListItem padding>
                   <Button onClick={handleCopyWeek} variant={ButtonVariant.NONE}>
-                    Copy
+                    <List inline>
+                      <ListItem>
+                        <LinkIcon />
+                      </ListItem>
+                      <ListItem>Copy</ListItem>
+                    </List>
                   </Button>
                 </ListItem>
               </List>

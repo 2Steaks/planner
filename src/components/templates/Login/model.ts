@@ -6,6 +6,6 @@ export const initialValues = {
   email: ''
 };
 
-export const schema = Yup.object({
+export const schema = Yup.object().shape({
   email: Yup.string().email('Invalid email address').required('Required')
 });

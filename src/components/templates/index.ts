@@ -10,3 +10,4 @@ export { default as Recipe } from './Recipe';
 export { default as Recipes } from './Recipes';
 export { default as Shopping } from './Shopping';
 export { default as SignUp } from './SignUp';
+export { default as TagRecipes } from './TagRecipes';

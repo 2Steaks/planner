@@ -1,6 +1,7 @@
 /** @format */
 
 import { gql } from 'graphql-request';
+import { RECIPE_COMMON_FRAGMENT, RECIPE_INGREDIENTS_FRAGMENT } from './recipe';
 
 export const GET_TAGS = gql`
   query FindAllTags {
@@ -11,6 +12,25 @@ export const GET_TAGS = gql`
       }
     }
   }
+`;
+
+export const GET_TAG_BY_NAME = gql`
+  query FindTagByName($name: String!, $limit: Int!, $page: String) {
+    findTagByName(name: $name) {
+      id: _id
+      name
+      recipes(_size: $limit, _cursor: $page) {
+        data {
+          ...recipeCommonProps
+          ...recipeIngredientsProps
+        }
+        before
+        after
+      }
+    }
+  }
+  ${RECIPE_COMMON_FRAGMENT}
+  ${RECIPE_INGREDIENTS_FRAGMENT}
 `;
 
 export const CREATE_TAG = gql`

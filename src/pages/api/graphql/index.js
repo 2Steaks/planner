@@ -2,19 +2,27 @@
 
 import Iron from '@hapi/iron';
 import Axios from 'axios';
-import { getTokenCookie } from '@project/services/cookies';
+import {
+  getTokenCookie,
+  magicAdmin,
+  removeTokenCookie
+} from '@project/services';
 
 export default async (req, res) => {
+  const encryptedToken = getTokenCookie(req);
   let cookie;
 
-  try {
-    cookie = await Iron.unseal(
-      getTokenCookie(req),
-      process.env.ENCRYPTION_SECRET,
-      Iron.defaults
-    );
-  } catch (error) {
-    res.status(401).end();
+  if (encryptedToken) {
+    try {
+      cookie = await Iron.unseal(
+        encryptedToken,
+        process.env.ENCRYPTION_SECRET,
+        Iron.defaults
+      );
+    } catch (error) {
+      console.error(error);
+      res.status(401).end();
+    }
   }
 
   try {
@@ -23,20 +31,24 @@ export default async (req, res) => {
       req.body,
       {
         headers: {
-          authorization: cookie ? `Bearer ${cookie.token}` : '',
+          authorization: `Bearer ${
+            cookie?.token || process.env.NEXT_PUBLIC_FAUNA_GUEST_SECRET
+          }`,
           'X-Schema-Preview': 'partial-update-mutation'
         }
       }
     );
 
-    res.statusCode = 200;
-    res.json(response.data);
+    if (response.data.errors) {
+      throw response;
+    }
+
+    res.status(200).json(response.data);
   } catch (error) {
     console.error(error);
 
-    if (error.response) {
-      res.statusCode = error.response.status;
-      res.json(error);
-    }
+    cookie && magicAdmin.users.logoutByIssuer(cookie.issuer);
+    removeTokenCookie(res);
+    res.status(401).json(error.data.errors);
   }
 };

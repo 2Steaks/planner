@@ -9,7 +9,7 @@ export interface AvatarProps {
   image: string;
 }
 
-export const Component: FunctionComponent<AvatarProps> = ({
+const Component: FunctionComponent<AvatarProps> = ({
   image = '/img/default-avatar.png',
   ...props
 }: AvatarProps) => {

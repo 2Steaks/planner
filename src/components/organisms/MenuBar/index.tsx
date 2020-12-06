@@ -11,40 +11,62 @@ import {
 } from '@project/helpers';
 import {
   Flex,
+  FlexAlignItems,
   FlexColumn,
   FlexJustifyContent
 } from '@project/components/atoms/Flex';
 import { Avatar } from '@project/components/molecules/Avatar';
 import { LogoIcon } from '@project/components/atoms/Icon';
-import { Wrapper } from '@project/components/atoms/Wrapper';
 import { Navigation } from '@project/components/molecules/Navigation';
 import { ProgressAPI } from '@project/containers/ProgressAPI';
-import { Span, styles } from './styles';
+import { When } from '@project/components/atoms/When';
+import { Wrapper } from '@project/components/atoms/Wrapper';
+import { Anchor, Span, styles } from './styles';
 
 export interface MenuBarProps {
   avatar: string;
   className: string;
+  isAuthenticated: boolean;
 }
 
 const Component: FunctionComponent<MenuBarProps> = ({
   avatar,
-  className
+  className,
+  isAuthenticated = false
 }: MenuBarProps) => {
   return (
     <header className={className}>
       <Wrapper padding>
-        <Flex justifyContent={FlexJustifyContent.SPACE_BETWEEN}>
+        <Flex
+          alignItems={FlexAlignItems.CENTER}
+          justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+        >
           <FlexColumn>
-            <LogoIcon /> <Span>Planner</Span>
-          </FlexColumn>
-          <FlexColumn>
-            <Link href="/profile" passHref>
-              <Avatar image={avatar} />
+            <Link href="/" passHref>
+              <a>
+                <LogoIcon /> <Span>Planner</Span>
+              </a>
             </Link>
           </FlexColumn>
+          <When condition={isAuthenticated}>
+            <FlexColumn>
+              <Link href="/profile" passHref>
+                <Avatar image={avatar} />
+              </Link>
+            </FlexColumn>
+          </When>
+          <When condition={!isAuthenticated}>
+            <FlexColumn>
+              <Link href="/plan" passHref>
+                <Anchor>Login</Anchor>
+              </Link>
+            </FlexColumn>
+          </When>
         </Flex>
       </Wrapper>
-      <Navigation />
+      <When condition={isAuthenticated}>
+        <Navigation />
+      </When>
       <ProgressAPI />
     </header>
   );

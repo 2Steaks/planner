@@ -6,14 +6,16 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { prop } from 'ramda';
 import { Breakpoints, RecipeType } from '@project/types';
-import { getTotalCalories } from '@project/services';
-import { FavouriteRecipe } from '@project/containers';
+import { useAuth } from '@project/context';
+import { getTotalCalories, hasHistory } from '@project/services';
+import { BackButton, FavouriteRecipe } from '@project/containers';
 import {
   Anchor,
   CutleryIcon,
   Button,
   ButtonVariant,
   Flex,
+  FlexAlignItems,
   FlexColumn,
   FlexJustifyContent,
   Grid,
@@ -24,13 +26,16 @@ import {
   ListItem,
   ListVariant,
   MenuButton,
+  PencilIcon,
   RecipeArticle,
+  ShareIcon,
+  Tag,
   When,
   Wrapper,
   WrapperSpacing
 } from '@project/components';
-import { getRelatedRecipes } from './model';
-import { ImageWrapper, RecipePhoto } from './styles';
+import { getRecipeTips, getRelatedRecipes } from './model';
+import { ImageWrapper, RecipePhoto, TagAnchor } from './styles';
 
 interface RecipeViewPageProps {
   isAuthor: boolean;
@@ -48,6 +53,8 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
   onEdit,
   record
 }: RecipeViewPageProps) => {
+  const { isAuthenticated } = useAuth() as any;
+
   function shareRecipe() {
     navigator.share({
       title: `Planner: ${record.title}`,
@@ -66,8 +73,16 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
         constraint={Breakpoints.LARGE}
         spacing={WrapperSpacing.LARGE}
       >
-        <Flex justifyContent={FlexJustifyContent.SPACE_BETWEEN}>
-          <FlexColumn>
+        <Flex
+          alignItems={FlexAlignItems.BASELINE}
+          justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+        >
+          <When condition={hasHistory()}>
+            <FlexColumn shrink={1}>
+              <BackButton />
+            </FlexColumn>
+          </When>
+          <FlexColumn grow={1}>
             <Heading tag={HeadingTag.H1}>{record.title}</Heading>
           </FlexColumn>
           <FlexColumn>
@@ -80,14 +95,24 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
                         onClick={shareRecipe}
                         variant={ButtonVariant.NONE}
                       >
-                        Share
+                        <List inline>
+                          <ListItem>
+                            <ShareIcon />
+                          </ListItem>
+                          <ListItem>Share</ListItem>
+                        </List>
                       </Button>
                     </ListItem>
                   </When>
                   <When condition={isAuthor}>
                     <ListItem padding>
                       <Button onClick={onEdit} variant={ButtonVariant.NONE}>
-                        Edit
+                        <List inline>
+                          <ListItem>
+                            <PencilIcon />
+                          </ListItem>
+                          <ListItem>Edit</ListItem>
+                        </List>
                       </Button>
                     </ListItem>
                   </When>
@@ -101,7 +126,7 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
           <GridColumn xs={12} md={3}>
             <ImageWrapper>
               <RecipePhoto src={prop('image', record)} />
-              <When condition={!isAuthor}>
+              <When condition={isAuthenticated && !isAuthor}>
                 <FavouriteRecipe id={record.id as string} />
               </When>
             </ImageWrapper>
@@ -130,7 +155,13 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
 
             <List inline>
               {record?.tags?.data.map((tag: any) => (
-                <ListItem>{tag.name}</ListItem>
+                <ListItem key={tag.name}>
+                  <Tag>
+                    <Link href={`/tag/${tag.name}`} passHref>
+                      <TagAnchor>{tag.name}</TagAnchor>
+                    </Link>
+                  </Tag>
+                </ListItem>
               ))}
             </List>
           </GridColumn>
@@ -164,6 +195,18 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
           </Wrapper>
         </GridColumn>
       </Grid>
+
+      <Wrapper spacing={WrapperSpacing.SMALL}>
+        <When condition={Boolean(getRecipeTips(record).length)}>
+          <Heading tag={HeadingTag.H2}>Recipe Tips</Heading>
+        </When>
+
+        <List>
+          {getRecipeTips(record).map((tip: any) => (
+            <ListItem key={tip.text}>{tip.text}</ListItem>
+          ))}
+        </List>
+      </Wrapper>
 
       <Wrapper spacing={WrapperSpacing.SMALL}>
         <When condition={Boolean(getRelatedRecipes(record).length)}>

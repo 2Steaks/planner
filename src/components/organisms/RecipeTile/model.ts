@@ -9,7 +9,7 @@ export const getInitialValues: getInitialValuesType = R.evolve({
   serving: R.defaultTo('')
 });
 
-export const schema = Yup.object({
+export const schema = Yup.object().shape({
   id: Yup.string().required('Required'),
   serving: Yup.number().required('Required')
 });

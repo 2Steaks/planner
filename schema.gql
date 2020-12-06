@@ -1,5 +1,9 @@
 # @format
 
+type CookingTip @embedded {
+  text: String!
+}
+
 type Image @embedded {
   id: ID!
   url: Float!
@@ -33,7 +37,6 @@ type User {
   avatar: String
   favourites: [Recipe!] @relation(name: "user_favourites")
   recipes: [Recipe!] @relation(name: "user_recipes")
-  # plans: PlanList @relation
   plans: [Plan!] @relation
   shoppingLists: [Shopping!] @relation
 }
@@ -50,6 +53,7 @@ type Recipe {
   favouritedBy: [User!] @relation(name: "user_favourites")
   recipes: [Recipe]
   schedule: [Schedule] @relation
+  tips: [CookingTip]
 }
 
 type Schedule {
@@ -62,17 +66,10 @@ type Schedule {
 }
 
 type Plan {
-  # list: PlanList @relation
   week: String!
   schedule: [Schedule] @relation
   owner: User!
 }
-
-# type PlanList {
-#   count: Int! @resolver(name: "count_plans")
-#   plans: [Plan!] @relation
-#   owner: User!
-# }
 
 type Shopping {
   week: String!
@@ -82,7 +79,7 @@ type Shopping {
 
 type Tag {
   name: String! @unique
-  recipe: [Recipe] @relation
+  recipes: [Recipe] @relation
 }
 
 type Query {
@@ -90,12 +87,13 @@ type Query {
     @resolver(name: "all_plans_sorted_by_week", paginated: true)
   allRecipes: [Recipe!]
   allTags: [Tag!]
-  isUserFavouriteRecipeById(id: ID!): Boolean
-    @resolver(name: "find_favourite_recipe_by_id")
   findPlanByDate(week: String!): [Plan] @resolver(name: "find_plan_by_date")
   findShoppingByDate(week: String!): [Shopping]
     @resolver(name: "find_shopping_by_date")
+  findTagByName(name: String!): Tag
   findUserByEmail(email: String!): User
-  searchRecipeByTitle(title: String!): [Recipe!]!
-    @resolver(name: "search_recipes_by_title")
+  isUserFavouriteRecipeById(id: ID!): Boolean
+    @resolver(name: "find_favourite_recipe_by_id")
+  searchRecipe(title: String, calories: Int, tags: [String]): [Recipe]
+    @resolver(name: "search_recipes")
 }

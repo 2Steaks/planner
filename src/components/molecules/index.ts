@@ -10,6 +10,7 @@ export * from './MobileMenuButton';
 export * from './MobileNavigation';
 export * from './Modal';
 export * from './Navigation';
+export * from './OnlineStatus';
 export * from './Progress';
 export * from './RangeInput';
 export * from './Repeater';

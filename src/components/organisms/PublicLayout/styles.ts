@@ -1,28 +1,38 @@
 /** @format */
 
 import { css, SerializedStyles } from '@emotion/core';
-import { colors, gutter } from '@project/theme';
-import { LogoIcon } from '@project/components/atoms/Icon';
-import { Heading } from '@project/components/atoms/Heading';
+import media from 'css-in-js-media';
+import { gutter } from '@project/theme';
+import { Drawer } from '@project/components/atoms/Drawer';
+import { ProgressAPI } from '@project/containers/ProgressAPI';
 
 export const styles = (): SerializedStyles => css`
-  text-align: center;
-
-  header {
-    padding: calc(${gutter} * 2);
-    background-color: ${colors.beige};
+  ${media('<tablet')} {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
-  ${Heading} {
-    margin: 0;
+  & > ${Drawer} {
+    z-index: 900;
   }
 
-  ${LogoIcon} {
-    width: 8rem;
-    height: 8rem;
+  & > ${ProgressAPI} {
+    position: fixed;
+    width: 100%;
+    height: 3px;
+    top: 0;
+    left: 0;
   }
 
   main {
-    padding: ${gutter};
+    ${media('<tablet')} {
+      padding: ${gutter};
+      flex: 1;
+    }
+
+    ${media('>tablet')} {
+      padding: calc(${gutter} * 3) ${gutter} ${gutter} ${gutter};
+    }
   }
 `;

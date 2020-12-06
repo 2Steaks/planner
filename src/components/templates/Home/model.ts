@@ -2,4 +2,4 @@
 
 import * as R from 'ramda';
 
-export const getRecords = R.pathOr([], ['allRecipes', 'data']);
+export const getTagRecipes = R.pathOr([], ['findTagByName', 'recipes', 'data']);

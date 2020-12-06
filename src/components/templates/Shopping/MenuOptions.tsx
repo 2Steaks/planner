@@ -11,9 +11,12 @@ import {
   Button,
   ButtonVariant,
   ButtonType,
+  CrossIcon,
+  EmailIcon,
   List,
   ListItem,
   MobileMenuButtonContext,
+  TickIcon,
   When,
   useMobileMenuButton
 } from '@project/components';
@@ -37,7 +40,12 @@ export const MenuOptions: FunctionComponent = () => {
           variant={ButtonVariant.NONE}
           form="shopping-form"
         >
-          Save
+          <List inline>
+            <ListItem>
+              <TickIcon />
+            </ListItem>
+            <ListItem>Save</ListItem>
+          </List>
         </Button>
       </ListItem>
       <When condition={dirty}>
@@ -47,7 +55,12 @@ export const MenuOptions: FunctionComponent = () => {
             type={ButtonType.RESET}
             variant={ButtonVariant.NONE}
           >
-            Reset
+            <List inline>
+              <ListItem>
+                <CrossIcon />
+              </ListItem>
+              <ListItem>Reset</ListItem>
+            </List>
           </Button>
         </ListItem>
       </When>
@@ -62,7 +75,12 @@ export const MenuOptions: FunctionComponent = () => {
           }
           variant={ButtonVariant.NONE}
         >
-          Share
+          <List inline>
+            <ListItem>
+              <EmailIcon />
+            </ListItem>
+            <ListItem>Send</ListItem>
+          </List>
         </Button>
       </ListItem>
     </List>

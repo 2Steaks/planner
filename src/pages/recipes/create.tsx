@@ -1,12 +1,30 @@
 /** @format */
 
 import React, { FunctionComponent } from 'react';
-import { Recipe, PrivateLayout } from '@project/components';
+import { useAuth } from '@project/context';
+import {
+  Login,
+  PrivateLayout,
+  PublicLayout,
+  Recipe
+} from '@project/components';
 
-const RecipePage: FunctionComponent = () => (
-  <PrivateLayout>
-    <Recipe />
-  </PrivateLayout>
-);
+const RecipePage: FunctionComponent = () => {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return (
+      <PublicLayout>
+        <Login />
+      </PublicLayout>
+    );
+  }
+
+  return (
+    <PrivateLayout>
+      <Recipe />
+    </PrivateLayout>
+  );
+};
 
 export default RecipePage;

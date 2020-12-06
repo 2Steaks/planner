@@ -8,6 +8,10 @@ export interface RecipeMethodType {
   instruction: string;
 }
 
+export interface RecipeTipType {
+  text: string;
+}
+
 export interface RecipeType {
   id?: string;
   author?: any;
@@ -17,6 +21,7 @@ export interface RecipeType {
   ingredients?: RecipeIngredientType[];
   method?: RecipeMethodType[];
   serving?: number;
+  tips?: RecipeTipType[];
   title?: string;
   tags?: {
     data: any[];

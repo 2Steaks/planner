@@ -12,11 +12,11 @@ interface ShoppingType {
 
 export interface UserType {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
-  calories: number;
-  avatar: string;
+  calories?: number;
+  avatar?: string;
   recipes?: RecipeType[];
   plans?: PlanType[];
   shoppingLists?: ShoppingType[];

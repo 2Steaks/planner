@@ -10,10 +10,13 @@ import {
   CREATE_SHOPPING,
   UPDATE_SHOPPING
 } from '@project/graphql';
+import { hasHistory } from '@project/services';
 import { useAuth } from '@project/context';
 import { useGraphMutation, useGraphQuery } from '@project/hooks';
+import { BackButton } from '@project/containers';
 import {
   Flex,
+  FlexAlignItems,
   FlexColumn,
   FlexJustifyContent,
   Heading,
@@ -83,8 +86,16 @@ const Shopping: FunctionComponent<ShoppingPageProps> = ({
         >
           <Form id="shopping-form">
             <Wrapper spacing={WrapperSpacing.LARGE}>
-              <Flex justifyContent={FlexJustifyContent.SPACE_BETWEEN}>
-                <FlexColumn>
+              <Flex
+                alignItems={FlexAlignItems.BASELINE}
+                justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+              >
+                <When condition={hasHistory()}>
+                  <FlexColumn shrink={1}>
+                    <BackButton />
+                  </FlexColumn>
+                </When>
+                <FlexColumn grow={1}>
                   <Heading>Shopping List</Heading>
                 </FlexColumn>
                 <FlexColumn>

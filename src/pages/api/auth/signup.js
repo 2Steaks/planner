@@ -1,6 +1,7 @@
 /** @format */
 
 import Iron from '@hapi/iron';
+import * as Yup from 'yup';
 import {
   createFaunaUser,
   getFaunaToken,
@@ -14,8 +15,20 @@ import {
 export default async function signup(req, res) {
   const { firstName, lastName } = req.body;
 
-  if (!firstName || !lastName) {
-    return res.status(400).send(`First name and Last name required.`);
+  try {
+    const schema = Yup.object().shape({
+      firstName: Yup.string().required('Required'),
+      lastName: Yup.string().required('Required')
+    });
+
+    await schema.validate({ firstName, lastName }, { abortEarly: false });
+  } catch (errors) {
+    return res.status(400).json({
+      errors: errors.inner.reduce(
+        (acc, err) => ({ ...acc, [err.path]: err.message }),
+        {}
+      )
+    });
   }
 
   try {
@@ -29,16 +42,16 @@ export default async function signup(req, res) {
     );
 
     if (isExistingUser) {
-      return res.status(400).send(`Email ${magicUser.email} already exists`);
+      return res.status(400).json({
+        errors: {
+          email: 'already exists'
+        }
+      });
     }
 
     const newUser = await faunaGuestClient.query(
       createFaunaUser({ email: magicUser.email, firstName, lastName })
     );
-
-    // await faunaGuestClient.query(
-    //   createFaunaUserMeta(newUser)
-    // );
 
     const { secret } = await faunaAdminClient.query(getFaunaToken(newUser));
 

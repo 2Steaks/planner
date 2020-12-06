@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { compose, difference } from 'ramda';
+import { compose, difference, prop } from 'ramda';
 import { withDisplayName, withLogging, withStyle } from '@project/helpers';
 import { useDebounce } from '@project/hooks';
 import { ClickAwayListener } from '@project/components/atoms/ClickAwayListener';
@@ -120,11 +120,11 @@ const Component: FunctionComponent<SelectProps> = ({
               <Label htmlFor={name}>{label}</Label>
             </When>
             <InputWrapper onClick={handleFocus}>
-              <Flex spacing="0.2rem" wrap={FlexWrap.WRAP}>
+              <Flex spacing="0.5rem" wrap={FlexWrap.WRAP}>
                 <When condition={multiple}>
                   {values.map((value: any, i: number) => (
-                    <FlexColumn key={value.label}>
-                      <Tag index={i}>{value.label}</Tag>
+                    <FlexColumn key={prop('label', value)}>
+                      <Tag index={i}>{prop('label', value)}</Tag>
                     </FlexColumn>
                   ))}
                 </When>

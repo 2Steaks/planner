@@ -13,13 +13,13 @@ export const styles: SerializedStyles = css`
   border-radius: 2.5px;
   min-width: 50px;
   color: ${colors.white};
-  margin-bottom: 0.4rem;
 `;
 
 export const TagContent: StyledComponentWithExtra<ChildrenType> = styled(
   'span'
 )`
   font-size: 1.4rem;
+  text-transform: capitalize;
 `;
 
 type TagIconTypes = ChildrenType & {
