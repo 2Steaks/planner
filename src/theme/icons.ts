@@ -2,9 +2,10 @@
 
 import { css } from '@emotion/core';
 
-export const iconBase = css`
-  width: 1rem;
-  height: 1rem;
+type IconBaseProps = { size?: number };
+export const iconBase = ({ size }: IconBaseProps) => css`
+  width: ${size ?? 1}rem;
+  height: ${size ?? 1}rem;
   fill: currentColor;
   pointer-events: none;
 `;

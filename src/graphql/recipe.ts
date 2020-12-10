@@ -25,6 +25,7 @@ export const RECIPE_AUTHOR_FRAGMENT = gql`
 export const RECIPE_INGREDIENTS_FRAGMENT = gql`
   fragment recipeIngredientsProps on Recipe {
     ingredients {
+      id
       amount
       calories
       original
@@ -187,4 +188,31 @@ export const DELETE_RECIPE = gql`
       id: _id
     }
   }
+`;
+
+export const SEARCH_RECIPES = gql`
+  query SearchRecipe(
+    $title: String
+    $calories: Int
+    $tags: [String]
+    $limit: Int!
+    $page: String
+  ) {
+    searchRecipe(
+      title: $title
+      calories: $calories
+      tags: $tags
+      _size: $limit
+      _cursor: $page
+    ) {
+      after
+      before
+      data {
+        ...recipeCommonProps
+        ...recipeIngredientsProps
+      }
+    }
+  }
+  ${RECIPE_COMMON_FRAGMENT}
+  ${RECIPE_INGREDIENTS_FRAGMENT}
 `;

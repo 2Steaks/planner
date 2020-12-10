@@ -1,7 +1,7 @@
 /** @format */
 
 import { NextPageContext } from 'next';
-import { format } from 'date-fns';
+import { endOfWeek, format, startOfWeek } from 'date-fns';
 import * as R from 'ramda';
 
 const addHiphen = R.curry((a, b) => `${a}-${b}`);
@@ -22,3 +22,20 @@ export const getWeekFromRoute: getWeekFromRouteType = R.compose(
   R.converge(addHiphen, [R.prop('year'), R.prop('week')]),
   R.prop('query')
 );
+
+export const getStartAndEndDateFromWeek = (x: string) =>
+  format(
+    startOfWeek(getDateFromWeek(x), {
+      locale: { code: 'en-GB' },
+      weekStartsOn: 1
+    }),
+    'd MMM Y'
+  ) +
+  ' - ' +
+  format(
+    endOfWeek(getDateFromWeek(x), {
+      locale: { code: 'en-GB' },
+      weekStartsOn: 1
+    }),
+    'd MMM Y'
+  );

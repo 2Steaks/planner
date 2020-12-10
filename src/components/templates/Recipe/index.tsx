@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { equals, ifElse, prop } from 'ramda';
 import { UserType } from '@project/types';
 import { GET_RECIPE } from '@project/graphql';
@@ -37,11 +37,25 @@ const RecipePage: FunctionComponent<RecipePageProps> = ({
 
   const record = getRecord(data) as any;
   const isAuthor = equals(getId(user), getAuthorId(record));
+  const Component = ifElse(prop('isEditing'), RecipeEditPage, RecipeViewPage);
+
+  useEffect(() => {
+    const Navigator = window.navigator as any;
+    let wakeLock: any;
+
+    (async () => {
+      try {
+        wakeLock = await Navigator.wakeLock.request('screen');
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+
+    return wakeLock?.release;
+  }, []);
 
   if (hasRecord && isLoading) return <p>Loading...</p>;
   if (hasRecord && error) return <p>Error :(</p>;
-
-  const Component = ifElse(prop('isEditing'), RecipeEditPage, RecipeViewPage);
 
   return (
     <ErrorBoundary fallback={ErrorFallback} key={record.id}>

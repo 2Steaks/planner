@@ -6,13 +6,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { prop } from 'ramda';
 import { Breakpoints, RecipeType } from '@project/types';
+import { colors } from '@project/theme';
 import { useAuth } from '@project/context';
-import { getTotalCalories, hasHistory } from '@project/services';
+import { getTotalCalories } from '@project/services';
 import { BackButton, FavouriteRecipe } from '@project/containers';
 import {
   Anchor,
-  CutleryIcon,
-  Button,
+  AppBar,
+  Circle,
   ButtonVariant,
   Flex,
   FlexAlignItems,
@@ -24,10 +25,12 @@ import {
   HeadingTag,
   List,
   ListItem,
-  ListVariant,
   MenuButton,
+  MenuListButton,
   PencilIcon,
-  RecipeArticle,
+  RecipeArticleWithLink,
+  ScalesIcon,
+  ServingIcon,
   ShareIcon,
   Tag,
   When,
@@ -35,7 +38,14 @@ import {
   WrapperSpacing
 } from '@project/components';
 import { getRecipeTips, getRelatedRecipes } from './model';
-import { ImageWrapper, RecipePhoto, TagAnchor } from './styles';
+import {
+  ImageWrapper,
+  InfoParagraph,
+  InfoWrapper,
+  IngredientList,
+  RecipePhoto,
+  TagAnchor
+} from './styles';
 
 interface RecipeViewPageProps {
   isAuthor: boolean;
@@ -73,54 +83,47 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
         constraint={Breakpoints.LARGE}
         spacing={WrapperSpacing.LARGE}
       >
-        <Flex
-          alignItems={FlexAlignItems.BASELINE}
-          justifyContent={FlexJustifyContent.SPACE_BETWEEN}
-        >
-          <When condition={hasHistory()}>
+        <AppBar isSticky={isAuthenticated}>
+          <Flex
+            alignItems={FlexAlignItems.BASELINE}
+            justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+          >
             <FlexColumn shrink={1}>
-              <BackButton />
+              <BackButton url={document.referrer} />
             </FlexColumn>
-          </When>
-          <FlexColumn grow={1}>
-            <Heading tag={HeadingTag.H1}>{record.title}</Heading>
-          </FlexColumn>
-          <FlexColumn>
-            <When condition={isAuthor || Boolean(navigator.share)}>
-              <MenuButton>
-                <List>
-                  <When condition={Boolean(navigator.share)}>
-                    <ListItem padding>
-                      <Button
-                        onClick={shareRecipe}
-                        variant={ButtonVariant.NONE}
-                      >
-                        <List inline>
-                          <ListItem>
-                            <ShareIcon />
-                          </ListItem>
-                          <ListItem>Share</ListItem>
-                        </List>
-                      </Button>
-                    </ListItem>
-                  </When>
-                  <When condition={isAuthor}>
-                    <ListItem padding>
-                      <Button onClick={onEdit} variant={ButtonVariant.NONE}>
-                        <List inline>
-                          <ListItem>
-                            <PencilIcon />
-                          </ListItem>
-                          <ListItem>Edit</ListItem>
-                        </List>
-                      </Button>
-                    </ListItem>
-                  </When>
-                </List>
-              </MenuButton>
-            </When>
-          </FlexColumn>
-        </Flex>
+            <FlexColumn grow={1}>
+              <Heading tag={HeadingTag.H1}>{record.title}</Heading>
+            </FlexColumn>
+            <FlexColumn>
+              <When condition={isAuthor || Boolean(navigator.share)}>
+                <MenuButton>
+                  <List>
+                    <When condition={Boolean(navigator.share)}>
+                      <ListItem dropMargin>
+                        <MenuListButton
+                          onClick={shareRecipe}
+                          variant={ButtonVariant.NONE}
+                        >
+                          <ShareIcon size={1.2} /> <span>Share</span>
+                        </MenuListButton>
+                      </ListItem>
+                    </When>
+                    <When condition={isAuthor}>
+                      <ListItem dropMargin>
+                        <MenuListButton
+                          onClick={onEdit}
+                          variant={ButtonVariant.NONE}
+                        >
+                          <PencilIcon size={1.2} /> <span>Edit</span>
+                        </MenuListButton>
+                      </ListItem>
+                    </When>
+                  </List>
+                </MenuButton>
+              </When>
+            </FlexColumn>
+          </Flex>
+        </AppBar>
 
         <Grid>
           <GridColumn xs={12} md={3}>
@@ -132,22 +135,30 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
             </ImageWrapper>
           </GridColumn>
           <GridColumn xs={12} md={9}>
-            <Wrapper spacing={WrapperSpacing.MEDIUM}>
-              <p>
-                <CutleryIcon /> Serves: {record.serving}
-              </p>
+            <InfoWrapper spacing={WrapperSpacing.MEDIUM}>
+              <InfoParagraph>
+                <Circle color={colors.blue}>
+                  <ServingIcon size={1.5} />
+                </Circle>{' '}
+                <span>Serves: {record.serving}</span>
+              </InfoParagraph>
 
-              <p>{getTotalCalories(record)} calories per serving</p>
+              <InfoParagraph>
+                <Circle color={colors.blue}>
+                  <ScalesIcon size={1.5} />
+                </Circle>{' '}
+                <span>{getTotalCalories(record)} calories per serving</span>
+              </InfoParagraph>
 
-              <p>
-                By{' '}
+              <InfoParagraph>
+                Added by{' '}
                 <Link href={`/author/${record.author.id}/recipes`}>
                   <Anchor>
                     {record.author.firstName} {record.author.lastName}
                   </Anchor>
                 </Link>
-              </p>
-            </Wrapper>
+              </InfoParagraph>
+            </InfoWrapper>
 
             <Wrapper spacing={WrapperSpacing.SMALL}>
               <p>{record.description}</p>
@@ -157,7 +168,7 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
               {record?.tags?.data.map((tag: any) => (
                 <ListItem key={tag.name}>
                   <Tag>
-                    <Link href={`/tag/${tag.name}`} passHref>
+                    <Link href={`/recipes/tag/${tag.name}`} passHref>
                       <TagAnchor>{tag.name}</TagAnchor>
                     </Link>
                   </Tag>
@@ -170,19 +181,19 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
 
       <Grid>
         <GridColumn xs={12} md={6}>
-          <Wrapper spacing={WrapperSpacing.LARGE}>
+          <Wrapper spacing={WrapperSpacing.LARGE} tag="section">
             <Heading tag={HeadingTag.H2}>Ingredients</Heading>
-            <List variant={ListVariant.UNDERLINE}>
+            <IngredientList>
               {record.ingredients?.map((ingredient) => (
-                <ListItem key={ingredient.original}>
+                <ListItem key={ingredient.original} underline>
                   {ingredient.original}
                 </ListItem>
               ))}
-            </List>
+            </IngredientList>
           </Wrapper>
         </GridColumn>
         <GridColumn xs={12} md={6}>
-          <Wrapper spacing={WrapperSpacing.LARGE}>
+          <Wrapper spacing={WrapperSpacing.LARGE} tag="section">
             <Heading tag={HeadingTag.H2}>Method</Heading>
             <List>
               {record.method?.map((method, index: number) => (
@@ -196,31 +207,29 @@ const RecipeViewPage: FunctionComponent<RecipeViewPageProps> = ({
         </GridColumn>
       </Grid>
 
-      <Wrapper spacing={WrapperSpacing.SMALL}>
-        <When condition={Boolean(getRecipeTips(record).length)}>
+      <When condition={Boolean(getRecipeTips(record).length)}>
+        <Wrapper spacing={WrapperSpacing.SMALL}>
           <Heading tag={HeadingTag.H2}>Recipe Tips</Heading>
-        </When>
+          <List>
+            {getRecipeTips(record).map((tip: any) => (
+              <ListItem key={tip.text}>{tip.text}</ListItem>
+            ))}
+          </List>
+        </Wrapper>
+      </When>
 
-        <List>
-          {getRecipeTips(record).map((tip: any) => (
-            <ListItem key={tip.text}>{tip.text}</ListItem>
-          ))}
-        </List>
-      </Wrapper>
-
-      <Wrapper spacing={WrapperSpacing.SMALL}>
-        <When condition={Boolean(getRelatedRecipes(record).length)}>
+      <When condition={Boolean(getRelatedRecipes(record).length)}>
+        <Wrapper spacing={WrapperSpacing.SMALL}>
           <Heading tag={HeadingTag.H2}>Related Recipes</Heading>
-        </When>
-
-        <Grid>
-          {getRelatedRecipes(record).map((relationship: any) => (
-            <GridColumn key={relationship.id} xs={6} md={3} tag="article">
-              <RecipeArticle {...relationship} />
-            </GridColumn>
-          ))}
-        </Grid>
-      </Wrapper>
+          <Grid>
+            {getRelatedRecipes(record).map((relationship: any) => (
+              <GridColumn key={relationship.id} xs={6} md={3} tag="article">
+                <RecipeArticleWithLink {...relationship} />
+              </GridColumn>
+            ))}
+          </Grid>
+        </Wrapper>
+      </When>
     </Fragment>
   );
 };

@@ -3,7 +3,7 @@
 import { css, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
 import { lighten, darken } from 'polished';
-import { StyledComponentWithExtra } from '@project/types';
+import { StyledComponentWithProps } from '@project/types';
 import { colors, gutter, styleWithHelpers } from '@project/theme';
 
 export const styles = styleWithHelpers(
@@ -13,7 +13,7 @@ export const styles = styleWithHelpers(
   `
 );
 
-export const Anchor: StyledComponentWithExtra<{ isActive: boolean }> = styled(
+export const Anchor: StyledComponentWithProps<{ isActive: boolean }> = styled(
   'a'
 )(
   styleWithHelpers(

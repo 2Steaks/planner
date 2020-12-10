@@ -1,17 +1,18 @@
 /** @format */
 
-// pages/index.js
 import React, { Fragment, FunctionComponent, useState } from 'react';
-import { compose, map } from 'ramda';
 import { GET_USER_OWN_RECIPES } from '@project/graphql';
 import { useGraphQuery } from '@project/hooks';
 import { useAuth } from '@project/context';
 import {
+  ArticleSkeleton,
   Button,
   Flex,
   FlexColumn,
   FlexJustifyContent,
   Grid,
+  GridColumn,
+  RecipeArticleWithLink,
   When,
   Wrapper,
   WrapperSpacing
@@ -21,13 +22,10 @@ import {
   getMyRecipesNextPage,
   getMyRecipesPrevPage
 } from './model';
-import { Recipe } from './Recipe';
 
 export interface MyRecipesProps {
   userId: number;
 }
-
-const Recipes = compose(map(Recipe), getMyRecipes);
 
 /**
  *
@@ -39,7 +37,7 @@ export const MyRecipes: FunctionComponent = () => {
   const [page, setPage] = useState<any>(null);
 
   const { data } = useGraphQuery(
-    ['my-recipes', { id: user.id, limit: 10, page }],
+    ['my-recipes', { id: user.id, limit: 8, page }],
     GET_USER_OWN_RECIPES
   );
 
@@ -54,7 +52,23 @@ export const MyRecipes: FunctionComponent = () => {
   return (
     <Fragment>
       <Wrapper spacing={WrapperSpacing.LARGE}>
-        <Grid tag="section">{Recipes(data)}</Grid>
+        <Grid tag="section">
+          <When condition={!getMyRecipes(data).length}>
+            <GridColumn xs={12} sm={6} md={3} tag="article">
+              <ArticleSkeleton />
+            </GridColumn>
+            <GridColumn xs={12} sm={6} md={3} tag="article">
+              <ArticleSkeleton />
+            </GridColumn>
+          </When>
+          <When condition={Boolean(getMyRecipes(data).length)}>
+            {getMyRecipes(data).map((props: any) => (
+              <GridColumn key={props.id} xs={12} sm={6} md={3} tag="article">
+                <RecipeArticleWithLink {...props} />
+              </GridColumn>
+            ))}
+          </When>
+        </Grid>
       </Wrapper>
 
       <Flex justifyContent={FlexJustifyContent.SPACE_BETWEEN}>

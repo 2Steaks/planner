@@ -3,7 +3,7 @@
 import styled from '@emotion/styled';
 import { animated } from 'react-spring';
 import media from 'css-in-js-media';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import { colors, gutter } from '@project/theme';
 import { Progress } from '@project/components/molecules/Progress';
 
@@ -50,6 +50,7 @@ export const Window = styled(animated.div)`
 
   ${media('>tablet')} {
     min-width: 300px;
+    max-height: 90vh;
   }
 
   ${Progress} {
@@ -85,16 +86,17 @@ export const windowAnimConfig = ({
   ...props
 });
 
-export const Header: StyledComponentWithExtra<ChildrenType> = styled('header')`
+export const Header: StyledComponentWithProps<ChildrenType> = styled('header')`
   border-bottom: 1px solid ${colors.slate200};
   padding: ${gutter};
+  color: ${colors.slate900};
 `;
 
-export const Body: StyledComponentWithExtra<ChildrenType> = styled('div')`
+export const Body: StyledComponentWithProps<ChildrenType> = styled('div')`
   padding: ${gutter};
 `;
 
-export const Footer: StyledComponentWithExtra<ChildrenType> = styled('div')`
+export const Footer: StyledComponentWithProps<ChildrenType> = styled('div')`
   border-top: 1px solid ${colors.slate200};
   padding: ${gutter};
 `;

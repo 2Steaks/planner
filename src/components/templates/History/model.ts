@@ -1,8 +1,7 @@
 /** @format */
 
-import { endOfWeek, format, startOfWeek } from 'date-fns';
 import * as R from 'ramda';
-import { getDateFromWeek, viewOr, getTotalCalories } from '@project/services';
+import { viewOr, getTotalCalories } from '@project/services';
 
 const allPlansLens = R.lensProp('allPlansSortedByWeek');
 const dataLens = R.lensProp('data');
@@ -12,17 +11,6 @@ const afterLens = R.lensProp('after');
 export const getRecord = viewOr([], R.compose(allPlansLens, dataLens));
 export const getPrevPage = R.view(R.compose(allPlansLens, beforeLens) as any);
 export const getNextPage = R.view(R.compose(allPlansLens, afterLens) as any);
-
-export const getPrettyDate = (x: string) =>
-  format(
-    startOfWeek(getDateFromWeek(x), { locale: { code: 'en-GB' } }),
-    'd MMM Y'
-  ) +
-  ' - ' +
-  format(
-    endOfWeek(getDateFromWeek(x), { locale: { code: 'en-GB' } }),
-    'd MMM Y'
-  );
 
 export const getPageLimitOptions = R.map((value) => ({
   label: R.toString(value),

@@ -16,7 +16,7 @@ import {
   WrapperSpacing
 } from '@project/components';
 import { getCombinedCalories, getMeals } from './model';
-import { Meal } from './Meal';
+import { Meal } from '../Meal';
 
 export interface DayProps {
   schedule: any;

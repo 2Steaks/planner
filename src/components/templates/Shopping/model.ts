@@ -41,15 +41,24 @@ const getId = R.lensProp('id');
 const getIngredients = R.lensProp('ingredients');
 const getShoppingIngredients = R.compose(getShopping, getIngredients);
 
+export const getColumnValue = (key: string) =>
+  R.compose(
+    Number,
+    R.prop('value'),
+    R.find(R.pathEq(['column', 'id'], key)),
+    R.pathOr([], ['row', 'cells'])
+  );
+
 export const getShoppingId = R.compose(getShopping, getId);
 const assocShoppingId = R.compose(
-  R.when(R.has('id'), R.view(getShoppingId as any))
+  R.when(R.has('id'), R.view(getId)),
+  R.view(getShopping)
 );
 
 const viewShoppingIngredients = viewOr([], getShoppingIngredients);
 
 const toValuesAndPickAll = R.compose(
-  R.map(R.pickAll(['amount', 'name', 'stock', 'unit'])),
+  R.map(R.pickAll(['id', 'amount', 'name', 'stock', 'unit'])),
   R.values as any
 );
 
@@ -57,7 +66,7 @@ type compileIngredientsType = (x: any) => any;
 const compileIngredients: compileIngredientsType = R.compose(
   toValuesAndPickAll,
   R.map(R.reduce(createIngredient, {})),
-  R.groupBy(R.prop('name') as any) as any,
+  R.groupBy(R.prop('id') as any) as any,
   R.flatten,
   mapIngredients,
   getSchedule
@@ -79,9 +88,22 @@ export const createQuery = R.curry((record, values) =>
     )
 );
 
-export const mergeIngredients = (shopping: [], ingredients: []) =>
-  R.unionWith(
-    R.both(R.eqProps('name'), R.eqProps('unit')),
-    viewShoppingIngredients(shopping),
-    compileIngredients(ingredients)
+const findByIdAndUnit = R.both(R.eqProps('id'), R.eqProps('unit'));
+
+export const mergeIngredients = (shopping: [], ingredients: []) => {
+  const planIngredients = compileIngredients(ingredients);
+
+  const shoppingInPlan = R.innerJoin(
+    findByIdAndUnit,
+    planIngredients,
+    viewShoppingIngredients(shopping)
   );
+
+  const upToDateShopping = R.unionWith(
+    findByIdAndUnit,
+    shoppingInPlan,
+    planIngredients
+  );
+
+  return upToDateShopping;
+};

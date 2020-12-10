@@ -1,11 +1,11 @@
 /** @format */
 
 import styled from '@emotion/styled';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import { gutter, objectFit } from '@project/theme';
 import { Heading, Image, Paper } from '@project/components';
 
-export const Anchor: StyledComponentWithExtra<ChildrenType> = styled('a')`
+export const Anchor: StyledComponentWithProps<ChildrenType> = styled('a')`
   ${Paper} {
     height: 380px;
     overflow: hidden;
@@ -27,7 +27,7 @@ export const Anchor: StyledComponentWithExtra<ChildrenType> = styled('a')`
   }
 `;
 
-export const Description: StyledComponentWithExtra<ChildrenType> = styled('p')`
+export const Description: StyledComponentWithProps<ChildrenType> = styled('p')`
   position: relative;
   overflow: hidden;
   height: 120px;
@@ -46,7 +46,7 @@ export const Description: StyledComponentWithExtra<ChildrenType> = styled('p')`
   }
 `;
 
-export const Calories: StyledComponentWithExtra<ChildrenType> = styled('p')`
+export const Calories: StyledComponentWithProps<ChildrenType> = styled('p')`
   position: absolute;
   left: ${gutter};
   bottom: ${gutter};

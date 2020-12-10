@@ -2,12 +2,13 @@
 
 import React, { FunctionComponent } from 'react';
 import { useFormikContext } from 'formik';
+import { useRowSelect } from 'react-table';
 import { propOr } from 'ramda';
 import styled from '@emotion/styled';
 import { colors, gutter } from '@project/theme';
-import { Input } from '@project/containers';
-import { InputVariant, InputType, Table } from '@project/components';
-import { getRequiredAmount } from './model';
+import { Input as InputField } from '@project/containers';
+import { Input, InputVariant, InputType, Table } from '@project/components';
+import { getColumnValue, getRequiredAmount } from './model';
 
 const InputWrapper = styled.div`
   padding: 10px;
@@ -21,10 +22,30 @@ const InputWrapper = styled.div`
   }
 `;
 
+const RowSelector = (props: any) => {
+  const { setFieldValue } = useFormikContext();
+  const amount = getColumnValue('amount')(props);
+  const stock = getColumnValue('stock')(props);
+  const isChecked = stock >= amount;
+
+  function handleChange() {
+    const value = isChecked ? null : amount;
+    setFieldValue(`ingredients.${props.row.index}.stock`, value);
+  }
+
+  return (
+    <Input
+      checked={isChecked}
+      onChange={handleChange}
+      type={InputType.CHECKBOX}
+    />
+  );
+};
+
 const EditableField = (props: any) => {
   return (
     <InputWrapper>
-      <Input
+      <InputField
         name={`ingredients.${props.row.index}.stock`}
         variant={InputVariant.NONE}
         type={InputType.NUMBER}
@@ -58,10 +79,24 @@ const columnList = [
   }
 ];
 
+const getHooks = ({ visibleColumns }: any) =>
+  visibleColumns.push((columns: any) => [
+    {
+      id: 'selection',
+      Cell: RowSelector
+    },
+    ...columns
+  ]);
+
 export const ShoppingTable: FunctionComponent = () => {
   const { values } = useFormikContext();
+  const options = [useRowSelect, getHooks];
 
   return (
-    <Table columns={columnList} data={propOr([], 'ingredients', values)} />
+    <Table
+      columns={columnList}
+      data={propOr([], 'ingredients', values)}
+      options={options}
+    />
   );
 };

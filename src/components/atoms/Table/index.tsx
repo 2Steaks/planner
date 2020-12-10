@@ -8,12 +8,14 @@ export interface TableProps {
   className: string;
   columns: any[];
   data: any[];
+  options: any[];
 }
 
 const Component: FunctionComponent<TableProps> = ({
   className,
   columns,
-  data
+  data,
+  options = []
 }: TableProps) => {
   const columnsMemo = useMemo(() => columns, []);
 
@@ -23,7 +25,7 @@ const Component: FunctionComponent<TableProps> = ({
     headerGroups,
     rows,
     prepareRow
-  } = useTable({ columns: columnsMemo, data });
+  } = useTable({ columns: columnsMemo, data }, ...options);
 
   return (
     <table className={className} {...getTableProps()}>
@@ -64,7 +66,7 @@ const Component: FunctionComponent<TableProps> = ({
 };
 
 export const Table = compose(
-  withStyle(styles, ['columns', 'data']),
+  withStyle(styles, ['columns', 'data', 'options']),
   withLogging(false),
   withDisplayName('Table')
 )(Component);

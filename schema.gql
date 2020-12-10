@@ -11,6 +11,7 @@ type Image @embedded {
 }
 
 type Ingredient @embedded {
+  id: Int
   amount: Float!
   calories: Float!
   original: String!
@@ -23,6 +24,7 @@ type Method @embedded {
 }
 
 type Stock @embedded {
+  id: Int
   amount: Float!
   name: String!
   stock: Float
@@ -95,5 +97,5 @@ type Query {
   isUserFavouriteRecipeById(id: ID!): Boolean
     @resolver(name: "find_favourite_recipe_by_id")
   searchRecipe(title: String, calories: Int, tags: [String]): [Recipe]
-    @resolver(name: "search_recipes")
+    @resolver(name: "search_recipes", paginated: true)
 }

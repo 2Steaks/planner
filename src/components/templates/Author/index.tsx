@@ -1,31 +1,31 @@
 /** @format */
 
 import React, { Fragment, FunctionComponent, useState } from 'react';
-import { compose, map } from 'ramda';
 import { Breakpoints } from '@project/types';
 import { GET_AUTHOR } from '@project/graphql';
 import { useGraphQuery } from '@project/hooks';
 import {
+  ArticleSkeleton,
   Avatar,
   Button,
   Flex,
   FlexColumn,
   FlexJustifyContent,
   Grid,
+  GridColumn,
   Heading,
   HeadingTag,
+  RecipeArticleWithLink,
+  When,
   Wrapper,
   WrapperSpacing
 } from '@project/components';
 import { getNextPage, getPrevPage, getRecipes, getRecord } from './model';
-import { Recipe } from './Recipe';
 import { Profile } from './styles';
 
 export interface AuthorProps {
   id: string;
 }
-
-const Recipes = compose(map(Recipe), getRecipes);
 
 /**
  *
@@ -36,7 +36,7 @@ const Author: FunctionComponent<AuthorProps> = ({ id }: AuthorProps) => {
   const [page, setPage] = useState<any>(null);
 
   const { data } = useGraphQuery(
-    [`author/${id}`, { id, limit: 10, page }],
+    [`author/${id}`, { id, limit: 8, page }],
     GET_AUTHOR
   );
 
@@ -67,7 +67,23 @@ const Author: FunctionComponent<AuthorProps> = ({ id }: AuthorProps) => {
       </Wrapper>
 
       <Wrapper spacing={WrapperSpacing.LARGE}>
-        <Grid tag="section">{Recipes(data)}</Grid>
+        <Grid tag="section">
+          <When condition={!getRecipes(data).length}>
+            <GridColumn xs={12} sm={6} md={3} tag="article">
+              <ArticleSkeleton />
+            </GridColumn>
+            <GridColumn xs={12} sm={6} md={3} tag="article">
+              <ArticleSkeleton />
+            </GridColumn>
+          </When>
+          <When condition={Boolean(getRecipes(data).length)}>
+            {getRecipes(data).map((props: any) => (
+              <GridColumn key={props.id} xs={12} sm={6} md={3} tag="article">
+                <RecipeArticleWithLink {...props} />
+              </GridColumn>
+            ))}
+          </When>
+        </Grid>
       </Wrapper>
 
       <Flex justifyContent={FlexJustifyContent.SPACE_BETWEEN}>

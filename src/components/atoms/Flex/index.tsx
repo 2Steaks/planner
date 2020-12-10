@@ -1,8 +1,13 @@
 /** @format */
 
 import React, { FunctionComponent, ReactNode } from 'react';
-import { compose } from 'ramda';
-import { withDisplayName, withLogging, withStyle } from '@project/helpers';
+import { compose, omit } from 'ramda';
+import {
+  withDisplayName,
+  withLogging,
+  withMappedProps,
+  withStyle
+} from '@project/helpers';
 import { flexColumnStyle, flexStyle } from './styles';
 
 export enum FlexDirection {
@@ -70,11 +75,13 @@ const Column: FunctionComponent<FlexColumnProps> = ({
 
 export const Flex = compose(
   withStyle(flexStyle, ['tag']),
+  withMappedProps(omit(['direction', 'spacing'])),
   withDisplayName('Flex')
 )(Container);
 
 export const FlexColumn = compose(
   withStyle(flexColumnStyle, ['tag']),
+  withMappedProps(omit(['width'])),
   withLogging(false),
   withDisplayName('FlexColumn')
 )(Column);

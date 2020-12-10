@@ -72,9 +72,18 @@ export const sendMealPlan = (user: UserType, plan: any) => {
  *
  * @param values
  */
+export const userCheckEmail = async (email: string) => {
+  return Axios.post('/api/auth/check', { email }).then((res) => res.data);
+};
+
+/**
+ *
+ * @param values
+ */
 export const userSignup = async (values: {
   email: string;
 }): Promise<SessionProps> => {
+  await userCheckEmail(R.prop('email', values));
   const magic = getMagicGuest();
   const DIDT = await magic.auth.loginWithMagicLink(R.pick(['email'], values));
 

@@ -1,11 +1,11 @@
 /** @format */
 
 import styled from '@emotion/styled';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import { gutter } from '@project/theme';
 import { Avatar } from '@project/components';
 
-export const Profile: StyledComponentWithExtra<ChildrenType> = styled('div')`
+export const Profile: StyledComponentWithProps<ChildrenType> = styled('div')`
   text-align: center;
 
   ${Avatar} > img {

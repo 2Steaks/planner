@@ -1,13 +1,12 @@
 /** @format */
 
 import React, { FunctionComponent } from 'react';
-import { difference } from 'ramda';
 import { useGraphMutation, useGraphQuery } from '@project/hooks';
 import { GET_TAGS, PARTIAL_UPDATE_RECIPE } from '@project/graphql';
 import { createRecipeQuery } from '@project/services';
 import { withField } from '@project/helpers/withField';
 import { Select } from '@project/components/organisms/Select';
-import { getSuggestions, createOptions } from './model';
+import { getSuggestions, createOptions, differenceToId } from './model';
 
 export interface TagPickerProps {
   disabled?: boolean;
@@ -43,8 +42,8 @@ export const TagPicker: FunctionComponent<TagPickerProps> = withField(
         name: label
       }));
 
-      const connections = difference(tags, value).map((tag) => tag.id);
-      const disconnections = difference(value, tags).map((tag) => tag.id);
+      const connections = differenceToId(tags, value);
+      const disconnections = differenceToId(value, tags);
 
       updateRecipe(
         createRecipeQuery({

@@ -1,10 +1,10 @@
 /** @format */
 
 import styled from '@emotion/styled';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import { Heading } from '@project/components';
 
-export const Article: StyledComponentWithExtra<ChildrenType> = styled(
+export const Article: StyledComponentWithProps<ChildrenType> = styled(
   'article'
 )`
   ${Heading} {

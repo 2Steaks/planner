@@ -33,7 +33,7 @@ export const MenuOptions: FunctionComponent = () => {
 
   return (
     <List>
-      <ListItem padding>
+      <ListItem>
         <Button
           disabled={isSubmitting}
           onClick={handleSubmit}
@@ -49,7 +49,7 @@ export const MenuOptions: FunctionComponent = () => {
         </Button>
       </ListItem>
       <When condition={dirty}>
-        <ListItem padding>
+        <ListItem>
           <Button
             disabled={isSubmitting}
             type={ButtonType.RESET}
@@ -64,7 +64,7 @@ export const MenuOptions: FunctionComponent = () => {
           </Button>
         </ListItem>
       </When>
-      <ListItem padding>
+      <ListItem>
         <Button
           disabled={isSubmitting}
           onClick={() =>

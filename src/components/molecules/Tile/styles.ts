@@ -2,9 +2,8 @@
 import { css, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
 import media from 'css-in-js-media';
-import { rgba } from 'polished';
 import { absoluteFill, colors, gutter, styleWithHelpers } from '@project/theme';
-import { Button, PlusIcon } from '@project/components';
+import { PlusIcon } from '@project/components';
 
 export const Container = styled.div`
   ${media('<tablet')} {
@@ -51,45 +50,10 @@ export const Body = styled('div')(
 );
 
 export const Actions = styled.div`
-  ${absoluteFill};
-  z-index: 1;
-  opacity: 0;
-  background-color: ${rgba(colors.white, 0.5)};
-  overflow: hidden;
-
-  &:hover {
-    opacity: ${(props) => (props.disabled ? 0 : 1)};
-  }
-
-  & > div {
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-  }
-
-  & > div > div {
-    &:nth-child(1) ${Button} {
-      background-color: ${colors.blue};
-    }
-
-    &:nth-child(2) ${Button} {
-      background-color: ${colors.green};
-    }
-
-    &:nth-child(3) ${Button} {
-      background-color: ${colors.red};
-    }
-  }
-
-  ${Button} {
-    padding: 1.5rem;
-    background-color: ${rgba(colors.slate900, 0.3)};
-    border-radius: 50%;
-
-    &:hover {
-      background-color: ${rgba(colors.slate900, 0.5)};
-    }
-  }
+  position: absolute;
+  top: ${gutter};
+  right: ${gutter};
+  z-index: 2;
 
   svg {
     fill: white;

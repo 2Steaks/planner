@@ -3,7 +3,7 @@
 import { css, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
 import media from 'css-in-js-media';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import { colors, gutter } from '@project/theme';
 
 export const styles: SerializedStyles = css`
@@ -13,7 +13,7 @@ export const styles: SerializedStyles = css`
   text-align: left;
 `;
 
-export const TableHead: StyledComponentWithExtra<ChildrenType> = styled('th')`
+export const TableHead: StyledComponentWithProps<ChildrenType> = styled('th')`
   background-color: ${colors.slate100};
   border: solid 1px ${colors.slate100};
   color: ${colors.slate900};
@@ -25,7 +25,7 @@ export const TableHead: StyledComponentWithExtra<ChildrenType> = styled('th')`
   }
 `;
 
-export const TableRow: StyledComponentWithExtra<ChildrenType> = styled('tr')`
+export const TableRow: StyledComponentWithProps<ChildrenType> = styled('tr')`
   ${media('<tablet')} {
     display: flex;
     flex-direction: column;
@@ -33,7 +33,7 @@ export const TableRow: StyledComponentWithExtra<ChildrenType> = styled('tr')`
   }
 `;
 
-export const TableCell: StyledComponentWithExtra<ChildrenType> = styled('td')`
+export const TableCell: StyledComponentWithProps<ChildrenType> = styled('td')`
   border-bottom: solid 1px ${colors.slate200};
 
   ${media('<tablet')} {

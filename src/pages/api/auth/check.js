@@ -8,13 +8,13 @@ export default async function signup(req, res) {
 
   try {
     const schema = Yup.object().shape({
-      email: Yup.email().required('Required')
+      email: Yup.string().email().required('Required')
     });
 
     await schema.validate({ email }, { abortEarly: false });
   } catch (errors) {
     return res.status(400).json({
-      errors: errors.inner.reduce(
+      errors: errors?.inner.reduce(
         (acc, err) => ({ ...acc, [err.path]: err.message }),
         {}
       )
@@ -26,10 +26,10 @@ export default async function signup(req, res) {
       isExistingUserByEmail(email)
     );
 
-    if (!isExistingUser) {
+    if (isExistingUser) {
       return res.status(400).send({
         errors: {
-          email: 'does not exist'
+          email: 'already exists'
         }
       });
     }

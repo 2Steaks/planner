@@ -1,7 +1,7 @@
 /** @format */
 
 import styled from '@emotion/styled';
-import { StyledComponentWithExtra } from '@project/types';
+import { StyledComponentWithProps } from '@project/types';
 import { colors, gutter } from '@project/theme';
 
 const toggleSize = '1.8rem';
@@ -36,7 +36,7 @@ export const Slider = styled('span')`
   }
 `;
 
-export const Label: StyledComponentWithExtra<any> = styled('label')`
+export const Label: StyledComponentWithProps<any> = styled('label')`
   position: relative;
   display: inline-block;
   width: 5rem;

@@ -2,8 +2,7 @@
 
 import styled from '@emotion/styled';
 import { absoluteFill, colors, gutter, objectFit } from '@project/theme';
-import { Heading } from '@project/components/atoms/Heading';
-import { Image } from '@project/components/atoms/Image';
+import { Heading, Image } from '@project/components';
 
 export const MealBody = styled('div')`
   padding: ${gutter};
@@ -13,6 +12,7 @@ export const MealBody = styled('div')`
     color: ${colors.white};
     position: relative;
     margin: 0;
+    max-width: 58%;
   }
 
   ${Image} {

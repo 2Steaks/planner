@@ -5,6 +5,12 @@ import { compose } from 'ramda';
 import { withDisplayName, withMappedProps, withStyle } from '@project/helpers';
 import { styles } from './styles';
 
+export enum HeadingAlign {
+  CENTER = 'center',
+  LEFT = 'left',
+  RIGHT = 'right'
+}
+
 export enum HeadingSize {
   H1 = 'H1',
   H2 = 'H2',

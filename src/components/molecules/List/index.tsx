@@ -10,11 +10,6 @@ import {
 } from '@project/components/atoms/Flex';
 import { listItemStyle, listStyle } from './styles';
 
-export enum ListVariant {
-  NONE = 'NONE',
-  UNDERLINE = 'UNDERLINE'
-}
-
 export interface ListProps {
   children: ReactNode | ReactNode[] | JSX.Element;
   className?: string;

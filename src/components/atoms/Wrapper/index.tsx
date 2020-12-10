@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { FunctionComponent, ReactNode } from 'react';
-import { compose } from 'ramda';
+import { compose, omit } from 'ramda';
 import { Breakpoints } from '@project/types';
 import {
   withDisplayName,
@@ -44,6 +44,6 @@ const computed = (props: WrapperProps) => ({
 export const Wrapper = compose(
   withStyle(compose(styles, computed), ['tag']),
   withLogging(false),
-  withMappedProps(computed),
+  withMappedProps(compose(omit(['spacing']), computed)),
   withDisplayName('Wrapper')
 )(Component);

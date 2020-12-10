@@ -3,7 +3,7 @@
 import { MouseEvent } from 'react';
 import { css, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import {
   colors,
   gutter,
@@ -15,7 +15,7 @@ import { Menu } from '@project/components/atoms/Menu';
 type InputWrapperType = ChildrenType & {
   onClick?: (event: MouseEvent<HTMLDivElement>) => void;
 };
-export const InputWrapper: StyledComponentWithExtra<InputWrapperType> = styled(
+export const InputWrapper: StyledComponentWithProps<InputWrapperType> = styled(
   'div'
 )(
   styleWithHelpers(
@@ -26,7 +26,7 @@ export const InputWrapper: StyledComponentWithExtra<InputWrapperType> = styled(
 );
 
 type InputFieldType = ChildrenType & any;
-export const InputField: StyledComponentWithExtra<InputFieldType> = styled(
+export const InputField: StyledComponentWithProps<InputFieldType> = styled(
   'input'
 )(
   styleWithHelpers(

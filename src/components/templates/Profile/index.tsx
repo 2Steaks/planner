@@ -11,9 +11,10 @@ import {
   createUserQueryProps,
   uploadImage
 } from '@project/services';
-import { useGraphMutation } from '@project/hooks';
-import { Input, RangeInput, Switch } from '@project/containers';
+import { useGraphMutation, useLocalStorage } from '@project/hooks';
+import { BackButton, Input, RangeInput } from '@project/containers';
 import {
+  AppBar,
   AvatarUploader,
   Button,
   ButtonVariant,
@@ -21,22 +22,32 @@ import {
   ErrorBoundary,
   ErrorFallback,
   Flex,
+  FlexAlignItems,
   FlexColumn,
   Grid,
   GridColumn,
   Heading,
+  HeadingSize,
+  HeadingTag,
   InputType,
+  Label,
+  PushNotificationButton,
   When,
   Wrapper,
   WrapperSpacing
 } from '@project/components';
 import { schema } from './model';
-import { HeadingSize, HeadingTag } from '@project/components/atoms';
+import { EmailNotificationIcon } from './styles';
 
 const Profile: FunctionComponent = () => {
   const { logout, user, setUser } = useAuth() as AuthContextProps & {
     user: any;
   };
+
+  const [isEmailActive, setEmailActive] = useLocalStorage(
+    'email-notifications',
+    false
+  );
 
   const [updateUser] = useGraphMutation(UPDATE_USER, {
     onSuccess: compose(setUser, prop('updateUser') as any)
@@ -69,9 +80,18 @@ const Profile: FunctionComponent = () => {
       >
         {({ dirty, isSubmitting, values, ...formProps }) => (
           <Form>
-            <Wrapper spacing={WrapperSpacing.LARGE}>
-              <Heading>Profile</Heading>
-            </Wrapper>
+            <AppBar isSticky>
+              <Wrapper spacing={WrapperSpacing.MEDIUM}>
+                <Flex alignItems={FlexAlignItems.BASELINE}>
+                  <FlexColumn shrink={1}>
+                    <BackButton url="/" />
+                  </FlexColumn>
+                  <FlexColumn grow={1}>
+                    <Heading>Profile</Heading>
+                  </FlexColumn>
+                </Flex>
+              </Wrapper>
+            </AppBar>
             <Wrapper constraint={Breakpoints.SMALL}>
               <Grid>
                 <GridColumn xs={12} md={6}>
@@ -126,16 +146,16 @@ const Profile: FunctionComponent = () => {
                   </Wrapper>
 
                   <Wrapper spacing={WrapperSpacing.MEDIUM}>
-                    <Switch
-                      name="push_notifications"
-                      label="Recieve push notifications"
-                    />
+                    <Label>Recieve push notifications</Label>
+                    <PushNotificationButton />
                   </Wrapper>
                   <Wrapper spacing={WrapperSpacing.MEDIUM}>
-                    <Switch
-                      name="email_notifications"
-                      label="Recieve email notifications"
-                    />
+                    <Label>Recieve email notifications</Label>
+                    <Button
+                      onClick={() => setEmailActive((bool: boolean) => !bool)}
+                    >
+                      <EmailNotificationIcon isActive={isEmailActive} />
+                    </Button>
                   </Wrapper>
                 </GridColumn>
               </Grid>

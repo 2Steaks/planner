@@ -10,22 +10,29 @@ import {
   CREATE_SHOPPING,
   UPDATE_SHOPPING
 } from '@project/graphql';
-import { hasHistory } from '@project/services';
+import { sendShoppingList } from '@project/services';
 import { useAuth } from '@project/context';
 import { useGraphMutation, useGraphQuery } from '@project/hooks';
 import { BackButton } from '@project/containers';
 import {
+  AppBar,
+  Button,
+  ButtonVariant,
+  ButtonType,
+  EmailIcon,
   Flex,
   FlexAlignItems,
   FlexColumn,
   FlexJustifyContent,
+  List,
+  ListItem,
   Heading,
   MenuButton,
+  MenuListButton,
   When,
   Wrapper,
   WrapperSpacing
 } from '@project/components';
-import { MenuOptions } from './MenuOptions';
 import { ShoppingTable } from './ShoppingTable';
 import { createQuery, getShoppingId, mergeIngredients } from './model';
 
@@ -41,7 +48,8 @@ const Shopping: FunctionComponent<ShoppingPageProps> = ({
 
   const { data: recipes } = useGraphQuery(
     [`plan/recipes/${week}`, { week }],
-    GET_PLAN_RECIPES
+    GET_PLAN_RECIPES,
+    { staleTime: 0 }
   );
 
   const { data: shopping } = useGraphQuery(
@@ -84,31 +92,64 @@ const Shopping: FunctionComponent<ShoppingPageProps> = ({
           }}
           onSubmit={handleSubmit}
         >
-          <Form id="shopping-form">
-            <Wrapper spacing={WrapperSpacing.LARGE}>
-              <Flex
-                alignItems={FlexAlignItems.BASELINE}
-                justifyContent={FlexJustifyContent.SPACE_BETWEEN}
-              >
-                <When condition={hasHistory()}>
-                  <FlexColumn shrink={1}>
-                    <BackButton />
+          {({ dirty, isSubmitting, values }) => (
+            <Form id="shopping-form">
+              <AppBar isSticky>
+                <Wrapper spacing={WrapperSpacing.MEDIUM}>
+                  <Flex
+                    alignItems={FlexAlignItems.BASELINE}
+                    justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+                  >
+                    <FlexColumn shrink={1}>
+                      <BackButton />
+                    </FlexColumn>
+                    <FlexColumn grow={1}>
+                      <Heading>Shopping List</Heading>
+                    </FlexColumn>
+                    <FlexColumn>
+                      <MenuButton>
+                        <List>
+                          <ListItem dropMargin>
+                            <MenuListButton
+                              disabled={isSubmitting}
+                              onClick={() =>
+                                sendShoppingList(
+                                  propOr('', 'email', user),
+                                  propOr([], 'ingredients', values)
+                                )
+                              }
+                              variant={ButtonVariant.NONE}
+                            >
+                              <EmailIcon size={1.2} /> <span>Send</span>
+                            </MenuListButton>
+                          </ListItem>
+                        </List>
+                      </MenuButton>
+                    </FlexColumn>
+                  </Flex>
+                </Wrapper>
+              </AppBar>
+
+              <Wrapper spacing={WrapperSpacing.LARGE}>
+                <ShoppingTable />
+              </Wrapper>
+
+              <Flex>
+                <When condition={dirty}>
+                  <FlexColumn>
+                    <Button disabled={isSubmitting} type={ButtonType.SUBMIT}>
+                      Save
+                    </Button>
+                  </FlexColumn>
+                  <FlexColumn>
+                    <Button disabled={isSubmitting} type={ButtonType.RESET}>
+                      Reset
+                    </Button>
                   </FlexColumn>
                 </When>
-                <FlexColumn grow={1}>
-                  <Heading>Shopping List</Heading>
-                </FlexColumn>
-                <FlexColumn>
-                  <MenuButton>
-                    <MenuOptions />
-                  </MenuButton>
-                </FlexColumn>
               </Flex>
-            </Wrapper>
-            <Wrapper spacing={WrapperSpacing.SMALL}>
-              <ShoppingTable />
-            </Wrapper>
-          </Form>
+            </Form>
+          )}
         </Formik>
       </When>
     </Fragment>

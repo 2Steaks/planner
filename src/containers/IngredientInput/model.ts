@@ -4,6 +4,7 @@ import Axios from 'axios';
 import * as R from 'ramda';
 
 const createMetaObject = (value: any) => (metadata: any) => ({
+  id: metadata.ndb_no,
   amount: metadata.serving_qty,
   calories: metadata.nf_calories,
   original: value,

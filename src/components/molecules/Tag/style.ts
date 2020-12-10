@@ -3,7 +3,7 @@
 import { MouseEvent } from 'react';
 import { css, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import { colors, gutter } from '@project/theme';
 
 export const styles: SerializedStyles = css`
@@ -15,7 +15,7 @@ export const styles: SerializedStyles = css`
   color: ${colors.white};
 `;
 
-export const TagContent: StyledComponentWithExtra<ChildrenType> = styled(
+export const TagContent: StyledComponentWithProps<ChildrenType> = styled(
   'span'
 )`
   font-size: 1.4rem;
@@ -25,7 +25,7 @@ export const TagContent: StyledComponentWithExtra<ChildrenType> = styled(
 type TagIconTypes = ChildrenType & {
   onClick: (event: MouseEvent<HTMLDivElement>) => void;
 };
-export const TagIcon: StyledComponentWithExtra<TagIconTypes> = styled('div')`
+export const TagIcon: StyledComponentWithProps<TagIconTypes> = styled('div')`
   cursor: pointer;
   width: 0.8rem;
   height: 0.8rem;

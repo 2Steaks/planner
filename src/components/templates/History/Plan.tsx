@@ -2,10 +2,11 @@
 
 import React, { FunctionComponent } from 'react';
 import Link from 'next/link';
-import { hiphenToSlash } from '@project/services';
+import { getStartAndEndDateFromWeek, hiphenToSlash } from '@project/services';
 import {
-  Button,
   ButtonVariant,
+  // CopyIcon,
+  EyeIcon,
   Flex,
   FlexColumn,
   FlexAlignItems,
@@ -13,15 +14,15 @@ import {
   Heading,
   HeadingSize,
   HeadingTag,
-  LinkIcon,
   List,
   ListItem,
   MenuButton,
+  MenuListButton,
   Table,
   Wrapper,
   WrapperSpacing
 } from '@project/components';
-import { columnList, getPrettyDate, getSchedule } from './model';
+import { columnList, getSchedule } from './model';
 import { Article } from './styles';
 
 export interface PlanPageProps {
@@ -33,47 +34,37 @@ export const Plan: FunctionComponent<PlanPageProps> = ({
   week,
   schedule
 }: PlanPageProps) => {
-  function handleCopyWeek() {
-    console.log('copy plan');
-  }
+  // function handleCopyWeek() {
+  //   console.log('copy plan');
+  // }
 
   return (
     <Article>
-      <Wrapper spacing={WrapperSpacing.LARGE}>
+      <Wrapper spacing={WrapperSpacing.MEDIUM}>
         <Flex
           alignItems={FlexAlignItems.CENTER}
           justifyContent={FlexJustifyContent.SPACE_BETWEEN}
         >
           <FlexColumn>
             <Heading size={HeadingSize.H5} tag={HeadingTag.H3}>
-              {getPrettyDate(week)}
+              {getStartAndEndDateFromWeek(week)}
             </Heading>
           </FlexColumn>
           <FlexColumn>
             <MenuButton>
               <List>
-                <ListItem padding>
+                <ListItem dropMargin>
                   <Link href={`/plan/${hiphenToSlash(week)}`} passHref>
-                    <Button variant={ButtonVariant.NONE}>
-                      <List inline>
-                        <ListItem>
-                          <LinkIcon />
-                        </ListItem>
-                        <ListItem>View</ListItem>
-                      </List>
-                    </Button>
+                    <MenuListButton variant={ButtonVariant.NONE}>
+                      <EyeIcon size={1.2} /> <span>View</span>
+                    </MenuListButton>
                   </Link>
                 </ListItem>
-                <ListItem padding>
+                {/* <ListItem dropMargin>
                   <Button onClick={handleCopyWeek} variant={ButtonVariant.NONE}>
-                    <List inline>
-                      <ListItem>
-                        <LinkIcon />
-                      </ListItem>
-                      <ListItem>Copy</ListItem>
-                    </List>
+                    <CopyIcon size={1.2} /> <span>Copy</span>
                   </Button>
-                </ListItem>
+                </ListItem> */}
               </List>
             </MenuButton>
           </FlexColumn>

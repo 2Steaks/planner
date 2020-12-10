@@ -3,12 +3,12 @@
 import { css, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
 import { rgba } from 'polished';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import { colors, gutter, styleWithHelpers } from '@project/theme';
 import { Flex, FlexColumn } from '@project/components/atoms/Flex';
 import { AlertVariant } from './index';
 
-export const Circle: StyledComponentWithExtra<ChildrenType> = styled('div')`
+export const Circle: StyledComponentWithProps<ChildrenType> = styled('div')`
   padding: 1rem;
   border-radius: 50%;
   background-color: ${rgba(colors.white, 0.3)};

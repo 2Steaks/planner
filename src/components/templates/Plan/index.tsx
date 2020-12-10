@@ -5,18 +5,21 @@ import React, { FunctionComponent } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Breakpoints, DaysOfTheWeek, UserType } from '@project/types';
+import { DaysOfTheWeek, UserType } from '@project/types';
 import { CREATE_PLAN, GET_PLAN } from '@project/graphql';
 import { useGraphMutation, useGraphQuery } from '@project/hooks';
 import {
   createPlanQuery,
-  hasHistory,
+  getStartAndEndDateFromWeek,
   hiphenToSlash,
   sendMealPlan
 } from '@project/services';
 import { useAuth } from '@project/context';
 import { BackButton } from '@project/containers';
 import {
+  AppBar,
+  ArrowLeftIcon,
+  ArrowRightIcon,
   Button,
   ButtonType,
   ButtonVariant,
@@ -27,30 +30,30 @@ import {
   FlexAlignItems,
   FlexColumn,
   FlexJustifyContent,
-  Heading,
-  HeadingSize,
   HeadingTag,
+  Heading,
   MenuButton,
-  LinkIcon,
+  MenuListButton,
   List,
   ListItem,
-  WeekPicker,
+  ShoppingCartIcon,
   When,
   Wrapper,
   WrapperSpacing
 } from '@project/components';
+import { WeekPickerWrapper } from './styles';
 import {
   createInitialValues,
-  formatDate,
   getCreateRecord,
   getId,
   getRecord,
-  getSchedule
+  getSchedule,
+  incrementWeek
 } from './model';
 import { Day } from './Day';
 
 interface PlanPageProps {
-  week?: string;
+  week: string;
 }
 
 /**
@@ -68,24 +71,22 @@ const PlanPage: FunctionComponent<PlanPageProps> = ({
 
   const { data, isLoading, refetch } = useGraphQuery(
     [`plan/${week}`, { week }],
-    GET_PLAN,
-    {
-      enabled: Boolean(week)
-    }
+    GET_PLAN
   );
 
   const record = getRecord(data);
   const hasRecord = Boolean(record);
-  const formattedDate = formatDate(new Date());
 
-  function handleWeekChange(value: string) {
-    router.push(`/plan/${hiphenToSlash(value)}`);
+  function handleWeekChange(offset: number) {
+    return function () {
+      router.push(`/plan/${hiphenToSlash(incrementWeek(offset)(week))}`);
+    };
   }
 
   async function handleSavePlan() {
     if (!hasRecord) {
       const response = await createPlan(
-        createPlanQuery(createInitialValues(record, week as string, user.id))
+        createPlanQuery(createInitialValues(record, week, user.id))
       );
 
       return getCreateRecord(response);
@@ -97,73 +98,83 @@ const PlanPage: FunctionComponent<PlanPageProps> = ({
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Head>
-        <title>Meal Planner: {formattedDate}</title>
+        <title>Meal Planner: {getStartAndEndDateFromWeek(week)}</title>
       </Head>
 
-      <Flex
-        alignItems={FlexAlignItems.BASELINE}
-        justifyContent={FlexJustifyContent.SPACE_BETWEEN}
-      >
-        <When condition={hasHistory()}>
-          <FlexColumn shrink={1}>
-            <BackButton />
-          </FlexColumn>
-        </When>
-        <FlexColumn grow={1}>
-          <Heading tag={HeadingTag.H1}>Meal Planner</Heading>
-        </FlexColumn>
-        <FlexColumn>
-          <MenuButton>
-            <List>
-              <ListItem padding>
-                <Button
-                  disabled={isLoading}
-                  type={ButtonType.BUTTON}
-                  variant={ButtonVariant.NONE}
-                  onClick={() => sendMealPlan(user, record)}
-                >
-                  <List inline>
-                    <ListItem>
-                      <EmailIcon />
-                    </ListItem>
-                    <ListItem>Send</ListItem>
-                  </List>
-                </Button>
-              </ListItem>
-              <ListItem padding>
-                <Link
-                  href={`/plan/${hiphenToSlash(week as string)}/shopping`}
-                  passHref
-                >
-                  <Button
-                    disabled={isLoading}
-                    type={ButtonType.BUTTON}
-                    variant={ButtonVariant.NONE}
-                  >
-                    <List inline>
-                      <ListItem>
-                        <LinkIcon />
-                      </ListItem>
-                      <ListItem>Shopping</ListItem>
-                    </List>
-                  </Button>
-                </Link>
-              </ListItem>
-            </List>
-          </MenuButton>
-        </FlexColumn>
-      </Flex>
+      <AppBar isSticky>
+        <Wrapper spacing={WrapperSpacing.MEDIUM}>
+          <Flex
+            alignItems={FlexAlignItems.BASELINE}
+            justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+          >
+            <FlexColumn shrink={1}>
+              <BackButton url="/" />
+            </FlexColumn>
+            <FlexColumn grow={1}>
+              <Heading tag={HeadingTag.H1}>Meal Planner</Heading>
+            </FlexColumn>
+            <FlexColumn>
+              <MenuButton>
+                <List>
+                  <ListItem dropMargin>
+                    <MenuListButton
+                      disabled={isLoading}
+                      type={ButtonType.BUTTON}
+                      variant={ButtonVariant.NONE}
+                      onClick={() => sendMealPlan(user, record)}
+                    >
+                      <EmailIcon size={1.2} /> <span>Send</span>
+                    </MenuListButton>
+                  </ListItem>
+                  <ListItem dropMargin>
+                    <Link
+                      href={`/plan/${hiphenToSlash(week)}/shopping`}
+                      passHref
+                    >
+                      <MenuListButton
+                        disabled={isLoading}
+                        type={ButtonType.BUTTON}
+                        variant={ButtonVariant.NONE}
+                      >
+                        <ShoppingCartIcon size={1.2} /> <span>Shopping</span>
+                      </MenuListButton>
+                    </Link>
+                  </ListItem>
+                </List>
+              </MenuButton>
+            </FlexColumn>
+          </Flex>
+        </Wrapper>
+      </AppBar>
 
       <When condition={isLoading}>
         <p>...loading</p>
       </When>
+
       <When condition={!isLoading}>
-        <Heading size={HeadingSize.H4} tag={HeadingTag.H2}>
-          {formattedDate}
-        </Heading>
-        <Wrapper constraint={Breakpoints.TINY} spacing={WrapperSpacing.LARGE}>
-          <WeekPicker name="week" value={week} onChange={handleWeekChange} />
-        </Wrapper>
+        <WeekPickerWrapper spacing={WrapperSpacing.MEDIUM}>
+          <List inline>
+            <ListItem>
+              <Button
+                onClick={handleWeekChange(-1)}
+                type={ButtonType.BUTTON}
+                variant={ButtonVariant.NONE}
+              >
+                <ArrowLeftIcon />
+              </Button>
+            </ListItem>
+            <ListItem>{getStartAndEndDateFromWeek(week)}</ListItem>
+            <ListItem>
+              <Button
+                onClick={handleWeekChange(1)}
+                type={ButtonType.BUTTON}
+                variant={ButtonVariant.NONE}
+              >
+                <ArrowRightIcon />
+              </Button>
+            </ListItem>
+          </List>
+        </WeekPickerWrapper>
 
         {DaysOfTheWeek.map((day, index) => (
           <Day

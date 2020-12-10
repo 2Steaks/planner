@@ -16,6 +16,8 @@
   "shortcuts": [
     {
       "name": "Create Recipe",
+      "short_name": "Create Recipe",
+      "description": "Create a new recipe",
       "url": "/recipes/create",
       "icons": [
         {

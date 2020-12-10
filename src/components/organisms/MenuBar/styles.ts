@@ -3,7 +3,7 @@
 import { css, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
 import { colors, gutter, objectFit, styleWithHelpers } from '@project/theme';
-import { CutleryIcon, Image, LogoIcon } from '@project/components/atoms';
+import { Image, LogoIcon } from '@project/components/atoms';
 import { ProgressAPI } from '@project/containers/ProgressAPI';
 
 export const Anchor = styled('a')`
@@ -23,7 +23,6 @@ export const styles = styleWithHelpers(
   (): SerializedStyles => css`
     background-color: ${colors.beige};
 
-    ${CutleryIcon},
     ${LogoIcon} {
       width: 4rem;
       height: 4rem;

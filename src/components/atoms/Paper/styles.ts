@@ -25,5 +25,7 @@ export const styles = styleWithHelpers(
         default: `2px solid ${colors.slate300}`
       })
     )};
+
+    cursor: ${has('onClick', 'pointer')};
   `
 );

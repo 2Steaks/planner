@@ -121,8 +121,13 @@ const Component: FunctionComponent<RepeaterProps> = ({
   return (
     <Context.Provider value={context}>
       <div className={className}>
-        {value.map((val: any, i: number) => (
-          <Item key={i} index={i} value={val} {...props} />
+        {value.map((value: any, i: number) => (
+          <Item
+            key={JSON.stringify(value)}
+            index={i}
+            value={value}
+            {...props}
+          />
         ))}
 
         <When condition={!isDisabled && !value.length}>

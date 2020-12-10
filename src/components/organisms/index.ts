@@ -10,5 +10,4 @@ export * from './ProgressCalories';
 export * from './PrivateLayout';
 export * from './PublicLayout';
 export * from './RecipeArticle';
-export * from './RecipeTile';
 export * from './Select';

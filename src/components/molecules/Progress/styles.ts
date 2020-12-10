@@ -2,7 +2,7 @@
 
 import { css, keyframes, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import { colors, gutter, styleWithHelpers } from '@project/theme';
 
 const backgroundColor = colors.slate300;
@@ -58,7 +58,7 @@ export const ProgressEl = styled('progress')(
   )
 );
 
-export const Span: StyledComponentWithExtra<ChildrenType> = styled('span')`
+export const Span: StyledComponentWithProps<ChildrenType> = styled('span')`
   color: white;
   display: block;
   position: relative;

@@ -12,7 +12,7 @@ export const getRouteId = R.path(['query', 'id']);
 
 export const getTargetValue = R.path(['target', 'value']) as (
   event: ChangeEvent<HTMLTextAreaElement>
-) => string;
+) => any;
 
 export const renameKey = R.curry((oldKey, newKey, obj) =>
   R.assoc(newKey, R.prop(oldKey, obj), R.dissoc(oldKey, obj))

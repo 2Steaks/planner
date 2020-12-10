@@ -1,22 +1,18 @@
 /** @format */
 
 import { css, SerializedStyles } from '@emotion/core';
-import { colors, styleWithHelpers } from '@project/theme';
-import { ListItem, ListVariant } from './index';
+import { colors, gutter, styleWithHelpers } from '@project/theme';
 
 export const listStyle = styleWithHelpers(
-  ({ has, when }): SerializedStyles => css`
+  ({ has }): SerializedStyles => css`
     display: inline-flex;
     align-items: ${has('inline', 'center')};
-
-    ${ListItem} {
-      border-bottom: ${when(
-        'variant',
-        ListVariant.UNDERLINE,
-        `2px solid ${colors.slate100}`
-      )};
-    }
   `
 );
 
-export const listItemStyle = styleWithHelpers((): SerializedStyles => css``);
+export const listItemStyle = styleWithHelpers(
+  ({ has, ifElse }): SerializedStyles => css`
+    border-bottom: ${has('underline', `2px solid ${colors.slate100}`)};
+    padding: 0 0 ${ifElse('dropMargin', true, 0, gutter)} 0;
+  `
+);

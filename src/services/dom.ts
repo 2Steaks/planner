@@ -8,6 +8,3 @@ export const ownerDocument = (node: Node | undefined): Document => {
 
 export const getDisplayName = (Component: FunctionComponent<any>) =>
   Component.displayName || Component.name || 'Component';
-
-export const hasHistory = () =>
-  typeof window !== 'undefined' && window.history.length > 0;

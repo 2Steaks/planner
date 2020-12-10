@@ -13,12 +13,3 @@ export const absoluteFill = css`
   width: 100%;
   height: 100%;
 `;
-
-export const breakPrivateLayout = css`
-  position: relative;
-  right: 50%;
-  left: 50%;
-  margin-right: -50vw;
-  margin-left: -50vw;
-  width: 100vw;
-`;

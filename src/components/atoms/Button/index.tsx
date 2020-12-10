@@ -43,7 +43,6 @@ export interface ButtonProps {
   type?: ButtonType;
 }
 
-// TODO fix ref TS
 const Component: FunctionComponent<ButtonProps> = ({
   children,
   forwardRef,

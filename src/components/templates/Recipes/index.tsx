@@ -4,10 +4,9 @@
 import React, { FunctionComponent, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { hasHistory } from '@project/services';
 import { BackButton } from '@project/containers';
 import {
-  Button,
+  AppBar,
   ButtonVariant,
   ErrorBoundary,
   ErrorFallback,
@@ -15,14 +14,16 @@ import {
   FlexAlignItems,
   FlexColumn,
   FlexJustifyContent,
-  Heading,
   List,
   ListItem,
   MenuButton,
+  MenuListButton,
+  Heading,
   PencilIcon,
   Tabs,
   Tab,
-  When
+  Wrapper,
+  WrapperSpacing
 } from '@project/components';
 import { FavouriteRecipes } from './FavouriteRecipes';
 import { MyRecipes } from './MyRecipes';
@@ -41,39 +42,34 @@ const RecipesPage: FunctionComponent = () => {
         <title>Recipes page</title>
       </Head>
 
-      <Flex
-        alignItems={FlexAlignItems.BASELINE}
-        justifyContent={FlexJustifyContent.SPACE_BETWEEN}
-      >
-        <When condition={hasHistory()}>
-          <FlexColumn shrink={1}>
-            <BackButton />
-          </FlexColumn>
-        </When>
-        <FlexColumn grow={1}>
-          <Heading>Recipes</Heading>
-        </FlexColumn>
-        <FlexColumn>
-          <MenuButton>
-            <List>
-              <ListItem padding>
-                <List inline>
-                  <ListItem>
-                    <PencilIcon />
-                  </ListItem>
-                  <ListItem>
-                    <Link href="/recipes/create" passHref>
-                      <Button variant={ButtonVariant.NONE}>
-                        Create Recipe
-                      </Button>
+      <AppBar isSticky>
+        <Wrapper spacing={WrapperSpacing.SMALL}>
+          <Flex
+            alignItems={FlexAlignItems.BASELINE}
+            justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+          >
+            <FlexColumn shrink={1}>
+              <BackButton url="/" />
+            </FlexColumn>
+            <FlexColumn grow={1}>
+              <Heading>Recipes</Heading>
+            </FlexColumn>
+            <FlexColumn>
+              <MenuButton>
+                <List>
+                  <ListItem dropMargin>
+                    <Link href={`/recipes/create`} passHref>
+                      <MenuListButton variant={ButtonVariant.NONE}>
+                        <PencilIcon size={1.2} /> <span>Create Recipe</span>
+                      </MenuListButton>
                     </Link>
                   </ListItem>
                 </List>
-              </ListItem>
-            </List>
-          </MenuButton>
-        </FlexColumn>
-      </Flex>
+              </MenuButton>
+            </FlexColumn>
+          </Flex>
+        </Wrapper>
+      </AppBar>
 
       <Tabs onChange={setView} value={view}>
         <Tab index={0} label="My Recipes">

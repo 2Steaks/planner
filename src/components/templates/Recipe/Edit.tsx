@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQueryCache } from 'react-query';
 import { Formik, Form } from 'formik';
-import { Breakpoints, RecipeType, UserType } from '@project/types';
+import { RecipeType, UserType } from '@project/types';
 import { CREATE_RECIPE, DELETE_RECIPE, UPDATE_RECIPE } from '@project/graphql';
 import {
   createRecipeQuery,
@@ -16,6 +16,7 @@ import {
 import { useAuth } from '@project/context';
 import { useGraphMutation } from '@project/hooks';
 import {
+  BackButton,
   IngredientInput,
   Input,
   RecipeSelectWithField,
@@ -24,11 +25,14 @@ import {
   TagPicker
 } from '@project/containers';
 import {
+  AppBar,
   Button,
   ButtonType,
   ButtonVariant,
   Flex,
+  FlexAlignItems,
   FlexColumn,
+  FlexJustifyContent,
   Grid,
   GridColumn,
   Heading,
@@ -92,17 +96,20 @@ const RecipeEditPage: FunctionComponent<RecipeEditPageProps> = ({
    * @todo start UI loading
    */
   function handleSubmit(values: any) {
+    const params = createRecipeQuery({ ...values, author: getId(user) });
+
     if (!hasRecord) {
-      createRecipe(createRecipeQuery({ ...values, author: getId(user) }));
+      createRecipe(params);
     } else {
-      updateRecipe(createRecipeQuery({ ...values, author: getId(user) }));
+      updateRecipe(params);
     }
   }
 
-  async function handleImageUpload(formData: any) {
-    const image = await uploadImage(formData);
-
-    updateRecipe(createRecipeQuery({ ...record, image, author: getId(user) }));
+  function handleImageUpload(setFieldValue: any) {
+    return async function (formData: any) {
+      const image = await uploadImage(formData);
+      setFieldValue('image', image);
+    };
   }
 
   function handleCancel({ resetForm }: any) {
@@ -151,25 +158,33 @@ const RecipeEditPage: FunctionComponent<RecipeEditPageProps> = ({
       >
         {({ dirty, isSubmitting, setFieldValue, values, ...formProps }) => (
           <Form id="recipe-form">
-            <Wrapper
-              centered
-              constraint={Breakpoints.LARGE}
-              spacing={WrapperSpacing.LARGE}
-            >
-              <Wrapper spacing={WrapperSpacing.SMALL}>
-                <Heading tag={HeadingTag.H1}>
-                  {!hasRecord ? 'Create Recipe' : 'Edit Recipe'}
-                </Heading>
-              </Wrapper>
+            <Wrapper spacing={WrapperSpacing.SMALL}>
+              <AppBar isSticky>
+                <Flex
+                  alignItems={FlexAlignItems.BASELINE}
+                  justifyContent={FlexJustifyContent.SPACE_BETWEEN}
+                >
+                  <FlexColumn shrink={1}>
+                    <BackButton url="/recipes" />
+                  </FlexColumn>
+                  <FlexColumn grow={1}>
+                    <Heading tag={HeadingTag.H1}>
+                      {!hasRecord ? 'Create Recipe' : 'Edit Recipe'}
+                    </Heading>
+                  </FlexColumn>
+                </Flex>
+              </AppBar>
+            </Wrapper>
 
+            <Wrapper spacing={WrapperSpacing.SMALL}>
               <Grid>
                 <GridColumn xs={12} md={3}>
                   <ImageWrapper>
                     <RecipePhotoUploader
                       label="Upload an image"
                       name="image"
-                      disabled={!hasRecord || isSubmitting}
-                      onChange={handleImageUpload}
+                      disabled={isSubmitting}
+                      onChange={handleImageUpload(setFieldValue)}
                       value={getImage(values as any)}
                     />
                   </ImageWrapper>

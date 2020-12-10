@@ -16,7 +16,11 @@ import { isDefined } from '@project/services';
 import { useMediaQuery } from '@project/hooks';
 import { Button, ButtonVariant } from '@project/components/atoms/Button';
 import { ClickAwayListener } from '@project/components/atoms/ClickAwayListener';
-import { Flex, FlexColumn } from '@project/components/atoms/Flex';
+import {
+  Flex,
+  FlexAlignItems,
+  FlexColumn
+} from '@project/components/atoms/Flex';
 import { Heading, HeadingTag } from '@project/components/atoms/Heading';
 import { CrossIcon } from '@project/components/atoms/Icon';
 import { Portal } from '@project/components/atoms/Portal';
@@ -79,7 +83,7 @@ export const Modal: FunctionComponent<ModalProps> = ({
                   <Progress />
                 </When>
                 <Header>
-                  <Flex>
+                  <Flex alignItems={FlexAlignItems.CENTER}>
                     <FlexColumn grow={1}>
                       <Heading tag={HeadingTag.H3}>{title}</Heading>
                     </FlexColumn>
@@ -89,7 +93,7 @@ export const Modal: FunctionComponent<ModalProps> = ({
                         variant={ButtonVariant.NONE}
                         onClick={onClose}
                       >
-                        <CrossIcon />
+                        <CrossIcon size={1.8} />
                       </Button>
                     </FlexColumn>
                   </Flex>

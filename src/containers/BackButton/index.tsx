@@ -4,25 +4,36 @@ import React, { FunctionComponent } from 'react';
 import { useRouter } from 'next/router';
 import { compose } from 'ramda';
 import { withDisplayName, withStyle } from '@project/helpers';
-import { ArrowLeftIcon } from '@project/components/atoms/Icon/ArrowLeft';
+import { BackArrowIcon } from '@project/components/atoms/Icon/BackArrow';
 import { Button, ButtonVariant } from '@project/components/atoms/Button';
 import { styles } from './styles';
 
 export interface BackButtonProps {
   className: string;
+  url?: string;
 }
 const Component: FunctionComponent<BackButtonProps> = ({
-  className
+  className,
+  url
 }: BackButtonProps) => {
   const router = useRouter();
+
+  function handleButtonClick() {
+    if (url) {
+      router.push(url);
+      return;
+    }
+
+    router.back();
+  }
 
   return (
     <Button
       className={className}
-      onClick={router.back}
+      onClick={handleButtonClick}
       variant={ButtonVariant.NONE}
     >
-      <ArrowLeftIcon />
+      <BackArrowIcon />
     </Button>
   );
 };

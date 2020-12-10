@@ -83,6 +83,7 @@ export const GET_PLAN_RECIPES = gql`
           recipe {
             id: _id
             ingredients {
+              id
               amount
               unit
               name

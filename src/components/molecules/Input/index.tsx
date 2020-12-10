@@ -4,7 +4,6 @@ import React, { ChangeEvent, FunctionComponent, Ref } from 'react';
 import { compose, defaultTo, evolve } from 'ramda';
 import {
   withDisplayName,
-  withLogging,
   withMappedProps,
   withRef,
   withStyle
@@ -73,8 +72,7 @@ const computed: any = evolve({ value: defaultTo('') });
 
 export const Input = compose(
   withStyle(compose(styles, computed)),
+  withRef,
   withMappedProps(computed),
-  withLogging(false),
-  withDisplayName('Input'),
-  withRef
+  withDisplayName('Input')
 )(Component);

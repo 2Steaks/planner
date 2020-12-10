@@ -7,7 +7,7 @@ import { useAuth } from '@project/context';
 import { Login, Plan, PrivateLayout, PublicLayout } from '@project/components';
 
 interface PlanPageProps {
-  week?: string;
+  week: string;
 }
 
 const PlanPage: NextPage<PlanPageProps> = ({ week }: PlanPageProps) => {

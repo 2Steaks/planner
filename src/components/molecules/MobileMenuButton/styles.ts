@@ -16,6 +16,16 @@ export const styles = styleWithHelpers(
       padding: ${gutter};
     }
 
+    span {
+      vertical-align: middle;
+    }
+
+    svg {
+      margin-right: calc(${gutter} / 2);
+      position: relative;
+      top: 1px;
+    }
+
     ${MenuIcon} {
       width: 2rem;
       height: 2rem;
@@ -49,9 +59,8 @@ export const Window = styled(animated.div)`
   background-color: white;
   border-radius: 10px 10px 0 0;
   box-shadow: 0px 0px 3px 1px ${colors.slate800};
-  padding: ${gutter};
+  padding: calc(${gutter} * 2);
   max-width: 100%;
-  padding-bottom: calc(${gutter} * 2);
   position: absolute;
   bottom: 0;
   width: 100%;

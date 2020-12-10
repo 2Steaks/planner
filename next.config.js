@@ -1,9 +1,13 @@
 /** @format */
 
 const withPWA = require('next-pwa');
+const R = require('ramda');
 
-module.exports = withPWA({
+const config = {
   pwa: {
-    dest: 'public'
+    dest: 'public',
+    importScripts: ['sw-push.js']
   }
-});
+}
+
+module.exports = R.compose(withPWA)(config);

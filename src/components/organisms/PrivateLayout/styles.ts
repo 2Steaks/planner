@@ -41,7 +41,7 @@ export const styles = (): SerializedStyles => css`
 
   main {
     ${media('<tablet')} {
-      padding: ${gutter};
+      padding: 0 ${gutter} ${gutter} ${gutter};
       flex: 1;
     }
 

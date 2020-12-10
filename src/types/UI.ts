@@ -13,7 +13,7 @@ export enum Breakpoints {
 
 export type ChildrenType = { children?: ReactNode | ReactNode[] };
 
-export type StyledComponentWithExtra<T> = StyledComponent<
+export type StyledComponentWithProps<T> = StyledComponent<
   T,
   T,
   Record<string, unknown>

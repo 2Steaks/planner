@@ -5,9 +5,9 @@ import { useGraphQuery } from '@project/hooks';
 import { map } from 'ramda';
 import { GET_PLANS_SORTED_BY_WEEK } from '@project/graphql';
 import { Breakpoints } from '@project/types';
-import { hasHistory } from '@project/services';
 import { BackButton } from '@project/containers';
 import {
+  AppBar,
   Button,
   ErrorBoundary,
   ErrorFallback,
@@ -18,8 +18,7 @@ import {
   Heading,
   Select,
   Wrapper,
-  WrapperSpacing,
-  When
+  WrapperSpacing
 } from '@project/components';
 import {
   getNextPage,
@@ -52,17 +51,21 @@ const History: FunctionComponent = () => {
 
   return (
     <ErrorBoundary fallback={ErrorFallback}>
-      <Flex alignItems={FlexAlignItems.BASELINE}>
-        <When condition={hasHistory()}>
-          <FlexColumn shrink={1}>
-            <BackButton />
-          </FlexColumn>
-        </When>
-        <FlexColumn grow={1}>
-          <Heading>History</Heading>
-        </FlexColumn>
-      </Flex>
-      <Wrapper constraint={Breakpoints.TINY} spacing={WrapperSpacing.LARGE}>
+      <AppBar isSticky>
+        <Wrapper spacing={WrapperSpacing.SMALL}>
+          <Flex alignItems={FlexAlignItems.BASELINE}>
+            <FlexColumn shrink={1}>
+              <BackButton url="/" />
+            </FlexColumn>
+
+            <FlexColumn grow={1}>
+              <Heading>History</Heading>
+            </FlexColumn>
+          </Flex>
+        </Wrapper>
+      </AppBar>
+
+      <Wrapper constraint={Breakpoints.TINY} spacing={WrapperSpacing.MEDIUM}>
         <Select
           options={getPageLimitOptions(PAGE_LIMITS)}
           onChange={setLimit}

@@ -3,10 +3,10 @@
 import { css, SerializedStyles } from '@emotion/core';
 import styled from '@emotion/styled';
 import { darken } from 'polished';
-import { StyledComponentWithExtra, ChildrenType } from '@project/types';
+import { StyledComponentWithProps, ChildrenType } from '@project/types';
 import { colors, styleWithHelpers } from '@project/theme';
 
-export const Value: StyledComponentWithExtra<ChildrenType> = styled('div')`
+export const Value: StyledComponentWithProps<ChildrenType> = styled('div')`
   text-align: center;
 `;
 

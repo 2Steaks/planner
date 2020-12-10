@@ -19,7 +19,7 @@ export const Switch: FunctionComponent<SwitchProps> = ({
     <div>
       <Span>{label}</Span>
       <Label htmlFor={name}>
-        <input type="checkbox" {...props} />
+        <input type="checkbox" id={name} {...props} />
         <Slider />
       </Label>
     </div>

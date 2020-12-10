@@ -15,6 +15,15 @@ export const styles = styleWithHelpers(
     & > ${Button} {
       padding: ${gutter};
     }
+    span {
+      vertical-align: middle;
+    }
+
+    svg {
+      margin-right: calc(${gutter} / 2);
+      position: relative;
+      top: 1px;
+    }
 
     ${MenuIcon} {
       width: 2rem;

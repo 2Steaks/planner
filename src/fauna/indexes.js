@@ -19,7 +19,7 @@ CreateIndex({
   name: 'findShoppingByDate',
   unique: false,
   serialized: true,
-  source: Collection('Plan'),
+  source: Collection('Shopping'),
   terms: [
     {
       field: ['data', 'week']
@@ -49,3 +49,26 @@ CreateIndex({
     }
   ]
 });
+
+CreateIndex({
+  name: 'recipes_by_ngrams',
+  source: {
+    collection: Collection('Recipe'),
+    fields: {
+      ngrams: Query(
+        Lambda(
+          'recipe',
+          Distinct(
+            NGram(LowerCase(Select(['data', 'title'], Var('recipe'))), 3, 3)
+          )
+        )
+      )
+    }
+  },
+  terms: [
+    {
+      binding: 'ngrams'
+    }
+  ]
+});
+

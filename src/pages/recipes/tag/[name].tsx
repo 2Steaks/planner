@@ -4,7 +4,7 @@ import React from 'react';
 import { NextPage, NextPageContext } from 'next';
 import { path } from 'ramda';
 import { useAuth } from '@project/context';
-import { PrivateLayout, PublicLayout, TagRecipes } from '@project/components';
+import { PrivateLayout, PublicLayout, RecipeTag } from '@project/components';
 
 interface TagPageProps {
   name: string;
@@ -16,14 +16,14 @@ const TagPage: NextPage<TagPageProps> = ({ name }: TagPageProps) => {
   if (!isAuthenticated) {
     return (
       <PublicLayout>
-        <TagRecipes name={name} />
+        <RecipeTag name={name} />
       </PublicLayout>
     );
   }
 
   return (
     <PrivateLayout>
-      <TagRecipes name={name} />
+      <RecipeTag name={name} />
     </PrivateLayout>
   );
 };

@@ -2,14 +2,10 @@
 
 import React, { FunctionComponent, ReactNode } from 'react';
 import { Button, ButtonVariant } from '@project/components/atoms/Button';
+import { Flex, FlexColumn } from '@project/components/atoms/Flex';
 import {
-  Flex,
-  FlexColumn,
-  FlexAlignItems
-} from '@project/components/atoms/Flex';
-import {
-  CrossIcon,
-  LinkIcon,
+  TrashIcon,
+  EyeIcon,
   PencilIcon,
   PlusIcon
 } from '@project/components/atoms/Icon';
@@ -20,67 +16,62 @@ export interface TileProps {
   children: ReactNode | ReactNode[];
   disabled?: boolean;
   id: string;
+  onClick: (id: string) => void;
   onDelete: (id: string) => void;
-  onAdd: (id: string) => void;
-  onLink?: (id: string) => void;
+  onLink: (id: string) => void;
 }
 
 export const Tile: FunctionComponent<TileProps> = ({
   children,
-  disabled,
   id,
-  onAdd,
+  onClick,
   onDelete,
   onLink
 }: TileProps) => {
   const hasContent = Boolean(id);
 
-  function handleAdd() {
-    onAdd(id);
+  function handleClick() {
+    onClick(id);
+  }
+
+  function handleLink() {
+    onLink(id);
   }
 
   function handleDelete() {
     onDelete(id);
   }
 
-  function handleLink() {
-    onLink && onLink(id);
-  }
-
   return (
     <Container>
       <When condition={!hasContent}>
-        <Body onClick={handleAdd}>
+        <Body onClick={handleClick}>
           <PlusIcon />
         </Body>
       </When>
       <When condition={hasContent}>
-        <Body>{children}</Body>
-        <Actions disabled={disabled}>
-          <Flex alignItems={FlexAlignItems.CENTER} justifyContent="center">
-            <FlexColumn>
-              <When condition={!disabled && Boolean(onLink)}>
+        <Body>
+          <Actions>
+            <Flex>
+              <FlexColumn>
                 <Button variant={ButtonVariant.NONE} onClick={handleLink}>
-                  <LinkIcon />
+                  <EyeIcon />
                 </Button>
-              </When>
-            </FlexColumn>
-            <FlexColumn>
-              <When condition={!disabled && Boolean(onAdd)}>
-                <Button variant={ButtonVariant.NONE} onClick={handleAdd}>
+              </FlexColumn>
+              <FlexColumn>
+                <Button variant={ButtonVariant.NONE} onClick={handleClick}>
                   <PencilIcon />
                 </Button>
-              </When>
-            </FlexColumn>
-            <FlexColumn>
-              <When condition={!disabled && Boolean(onDelete)}>
+              </FlexColumn>
+              <FlexColumn>
                 <Button variant={ButtonVariant.NONE} onClick={handleDelete}>
-                  <CrossIcon />
+                  <TrashIcon />
                 </Button>
-              </When>
-            </FlexColumn>
-          </Flex>
-        </Actions>
+              </FlexColumn>
+            </Flex>
+          </Actions>
+          {children}
+        </Body>
       </When>
     </Container>
   );

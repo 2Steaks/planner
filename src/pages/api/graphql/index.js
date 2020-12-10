@@ -47,8 +47,8 @@ export default async (req, res) => {
   } catch (error) {
     console.error(error);
 
-    cookie && magicAdmin.users.logoutByIssuer(cookie.issuer);
-    removeTokenCookie(res);
+    // cookie && magicAdmin.users.logoutByIssuer(cookie.issuer);
+    // removeTokenCookie(res);
     res.status(401).json(error.data.errors);
   }
 };

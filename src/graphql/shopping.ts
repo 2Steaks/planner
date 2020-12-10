@@ -5,6 +5,7 @@ import { gql } from 'graphql-request';
 export const SHOPPING_INGREDIENTS_FRAGMENT = gql`
   fragment shoppingIngredientsProps on Shopping {
     ingredients {
+      id
       amount
       name
       stock
